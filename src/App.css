@@ -1,0 +1,8 @@
+.results{
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+}
+
+.results::-webkit-scrollbar{
+    display: none;
+}
