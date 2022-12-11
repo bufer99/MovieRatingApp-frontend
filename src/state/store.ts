@@ -4,16 +4,21 @@ import authApiSlice from "./authApiSlice";
 import authSlice from "./authSlice";
 import movieSlice from "./movieSlice";
 import movieApiSlice from "./movieApiSlice";
+import userMovieApiSlice from './userMovieApiSlice'
 
 export const store = configureStore({
   reducer: {
     [movieApiSlice.reducerPath]: movieApiSlice.reducer,
-    authApi: authApiSlice.reducer,
+    [userMovieApiSlice.reducerPath]: userMovieApiSlice.reducer,
+    [authApiSlice.reducerPath]: authApiSlice.reducer,
     auth: authSlice,
     movie: movieSlice
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(movieApiSlice.middleware),
+    getDefaultMiddleware()
+      .concat(movieApiSlice.middleware)
+      .concat(userMovieApiSlice.middleware)
+      .concat(authApiSlice.middleware)
 });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself

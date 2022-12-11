@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Input, useDisclosure, Button, Collapse, Flex } from "@chakra-ui/react";
+import { Input, Flex } from "@chakra-ui/react";
 import SearchResult from './SearchResult';
-import { useLazyGetMoviesQuery } from './state/movieApiSlice';
-import { Movie } from './types';
-import MovieCard from './MovieCard';
+import { useLazyGetMoviesQuery } from '../state/movieApiSlice';
+import { Movie } from '../types';
 
 export default function SearchBar() {
 

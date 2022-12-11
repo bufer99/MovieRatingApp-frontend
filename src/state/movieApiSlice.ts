@@ -5,8 +5,8 @@ const TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0ZWMyZGFmMzM2ZWE5MjNhYzFlNTUwYTJk
 
 
 interface MovieResponse {
-    "page":number,
-    "results":Array<Movie>
+    "page": number,
+    "results": Array<Movie>
 }
 
 const movieApiSlice = createApi({
@@ -14,12 +14,12 @@ const movieApiSlice = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: BASE_URL,
         prepareHeaders: (headers) => {
-                headers.set('authorization', `Bearer ${TOKEN}`)
+            headers.set('authorization', `Bearer ${TOKEN}`)
             return headers
         }
     }),
     endpoints: (build) => ({
-        getMovies: build.query<MovieResponse,string>({
+        getMovies: build.query<MovieResponse, string>({
             query: (query) => ({ url: `movie?query=${query}` })
         }),
     }),

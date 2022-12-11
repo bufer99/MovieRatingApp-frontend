@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Box, Flex, Container, VStack, Grid, Input, Image, color, Spinner } from "@chakra-ui/react";
 import { StarIcon } from '@chakra-ui/icons';
-import { Movie } from './types';
+import { Movie } from '../types';
 
 export default function SearchResult(props: Movie) {
 
