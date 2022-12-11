@@ -1,10 +1,11 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Movie } from '../types';
-const BASE_URL = "localhost";
+import { Movie, Review } from '../types';
 
-interface MovieResponse {
-    "page": number,
-    "results": Array<Movie>
+const BASE_URL = "http://127.0.0.1:8000/api";
+
+interface Response {
+    status: number,
+    reviews: Array<Review>
 }
 
 const userMovieApiSlice = createApi({
@@ -12,14 +13,15 @@ const userMovieApiSlice = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: BASE_URL,
         prepareHeaders: (headers, { getState }:any) => {
+            headers.set('Accept','application/json');
             const token = getState().auth.token;
-            if (token) headers.set('authorization', `Bearer ${token.auth.token}`)
+            if (token) headers.set('Authorization', `Bearer ${token}`);
             return headers
         }
     }),
     endpoints: (build) => ({
-        getUserReviews: build.query<MovieResponse, void>({
-            query: () => ({ url: `movie?query=` })
+        getUserReviews: build.query<Response, void>({
+            query: () => ({ url: 'reviews' })
         }),
     }),
 });

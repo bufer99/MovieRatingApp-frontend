@@ -1,10 +1,10 @@
 import './App.css'
 import { Routes, Route, Outlet, Link } from "react-router-dom";
-import MovieBrowser from './Components/MovieBrowser';
-import NoMatch from './NoMatch';
+import MovieBrowser from './Components/Routes/MovieBrowser';
+import NoMatch from './Components/Routes/NoMatch';
 import Layout from './Components/Layout';
-import UserMovies from './Components/UserMovies';
-import Login from './Login';
+import UserMovies from './Components/Routes/UserMovies';
+import Login from './Components/Routes/Login';
 
 function App() {
 

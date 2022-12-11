@@ -21,6 +21,8 @@ const slice = createSlice({
             state: Auth,
             action: PayloadAction<Auth>
         ) => {
+            console.log(action.payload.user)
+            console.log(action.payload.token)
             state.user = action.payload.user
             state.token = action.payload.token
         },

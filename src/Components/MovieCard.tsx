@@ -1,11 +1,11 @@
 import { Box, Image } from "@chakra-ui/react"
 
 interface MovieProps {
-    title: string,
-    rating: number,
-    backdrop_path: string,
-    poster_path: string,
-    vote_average: number
+    title?: string,
+    rating?: number,
+    backdrop_path?: string,
+    poster_path?: string,
+    vote_average?: number
 }
 
 export default function MovieCard(props: MovieProps) {
@@ -20,7 +20,7 @@ export default function MovieCard(props: MovieProps) {
                 borderRadius="5%"
                 src={`https://image.tmdb.org/t/p/w500${poster_path}`}
             ></Image>
-            {/*<div style={{ "textOverflow": "ellipsis", "overflow": "hidden", "whiteSpace": "nowrap", }}>{title}</div>*/}
+            {<div style={{ "textOverflow": "ellipsis", "overflow": "hidden", "whiteSpace": "nowrap", }}>{title}</div>}
         </Box>
     )
 }
