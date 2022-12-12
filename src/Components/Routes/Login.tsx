@@ -1,9 +1,21 @@
+import { toast, ToastContainer } from 'react-toastify';
 import { useAppSelector, useAppDispatch } from '../../state/store';
 import { useRegisterMutation, useLoginMutation } from '../../state/authApiSlice';
 import React, { useState } from 'react';
-import { Button, Input, Spinner } from '@chakra-ui/react';
+import {
+    Button,
+    Container,
+    Flex,
+    Input,
+    Spinner,
+    FormControl,
+    FormLabel,
+    FormErrorMessage,
+    FormHelperText,
+} from '@chakra-ui/react';
 import { setCredentials } from '../../state/authSlice';
 import { useNavigate } from 'react-router';
+import "react-toastify/dist/ReactToastify.css";
 
 interface Form {
     email: string,
@@ -20,6 +32,7 @@ interface Login {
     fetchStarted: boolean,
 }
 
+
 export default function Login() {
 
     const dispatch = useAppDispatch();
@@ -28,13 +41,11 @@ export default function Login() {
     const [loginFn] = useLoginMutation();
 
     const [isLoading, setIsLoading] = useState<boolean>(false);
-
-    const [formInput, setFormInput] = useState<Form>(
-        {
-            "email": "bufer99@gmail.com",
-            "password": "12345"
-        }
-    );
+    const [formInput, setFormInput] = useState<Form>({
+        email: "bufer99@gmail.com",
+        password: "12345"
+    });
+    const [formError, setFormError] = useState<boolean>(false)
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         setFormInput((formInput) => {
@@ -59,7 +70,13 @@ export default function Login() {
                 dispatch(setCredentials(result.data));
                 navigate("/movies")
             } else {
-                //setError(true)
+                setFormError(true);
+                setFormInput(initialState);
+                toast.error('Wrong credentials', {
+                    position: "top-center",
+                    autoClose: 3000,
+                    hideProgressBar: false,
+                });
             }
         } catch (err) {
             console.log(err);
@@ -67,13 +84,49 @@ export default function Login() {
     }
 
     return (
-        <>
+        <Container
+            maxW={"300px"}
+        >
             <form>
-                <input id='email' value={formInput.email} onChange={onChange} type="text" />
-                <input id='password' value={formInput.password} onChange={onChange} type="text" />
-                <button onClick={onClick}>LOGIN</button>
+                <Flex
+                    direction={"column"}
+                    alignItems="center"
+                    gap={"10px"}
+                >
+                    <Input
+                        isInvalid={formError}
+                        placeholder="Email"
+                        _placeholder={{
+                            color: `${formError ? 'crimson' : ''}`
+                        }}
+
+                        backgroundColor={"white"}
+                        variant={"outline"}
+                        id='email'
+                        value={formInput.email}
+                        onChange={onChange}
+                        type="text"
+                    />
+                    <Input
+                        isInvalid={formError}
+                        placeholder= "Password"
+                        _placeholder={{
+                            color: `${formError ? 'crimson' : ''}`
+                        }}
+
+                        backgroundColor={"white"}
+                        variant={"outline"}
+                        id='password'
+                        value={formInput.password}
+                        onChange={onChange}
+                        type="text" />
+                    <Button
+                        onClick={onClick}
+                        w="50%"
+                    >LOGIN</Button>
+                </Flex>
             </form>
-            {isLoading && <Spinner />}
-        </>
+            <ToastContainer />
+        </Container>
     )
 }

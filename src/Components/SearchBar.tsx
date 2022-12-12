@@ -11,6 +11,10 @@ export default function SearchBar() {
     const [onFocus, setOnFocus] = useState<boolean>(false);
     const [queryResult, setQueryResult] = useState<Array<Movie>>([]);
 
+    useEffect(() => {
+        console.log(queryResult)
+    },[queryResult])
+
     const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         trigger(e.target.value).then(response => {
             if (data) {
