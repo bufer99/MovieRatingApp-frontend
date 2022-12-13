@@ -2,14 +2,21 @@ import { useEffect, useState } from 'react'
 import { Box, Flex, Container, VStack, Grid, Input, Image, color, Spinner } from "@chakra-ui/react";
 import { StarIcon } from '@chakra-ui/icons';
 import { Movie } from '../types';
+import { useAppDispatch } from '../state/store';
+import { setMovie } from '../state/movieSlice';
 
-export default function SearchResult(props: Movie) {
+export default function SearchResult({movie, loseFocus} : { movie:Movie, loseFocus: () => void}) {
 
-    const { title, backdrop_path, poster_path, vote_average, release_date } = props;
+    const { title, backdrop_path, poster_path, vote_average, release_date } = movie;
     const [isLoaded, setIsLoaded] = useState(false);
+    const dispatch = useAppDispatch()
 
     return (
         <Flex
+            onClick={() => {
+                dispatch(setMovie(movie));
+                loseFocus()
+            }}
             opacity={isLoaded ? `1` : '0'}
             padding="5px"
             width="100%"
@@ -19,9 +26,10 @@ export default function SearchResult(props: Movie) {
                 background: "gray.700",
             }}
             borderTop="1px solid #404040"
+            
         >
             <Image
-                onLoad={() => setIsLoaded(true) }
+                onLoad={() => setIsLoaded(true)}
                 src={`https://image.tmdb.org/t/p/w500/${poster_path}`}
                 alt={title}
                 maxH="80px"

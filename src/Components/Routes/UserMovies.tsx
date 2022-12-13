@@ -72,14 +72,12 @@ const m = [
 export default function UserMovies() {
 
     const { isError, isLoading, data } = useGetUserReviewsQuery();
-    const movies = useAppSelector(state => state.movie.movies);
+    const movie = useAppSelector(state => state.movie);
     console.log(data);
 
-    if (isLoading) {
-        return (
-            <Spinner />
-        )
-    }
+    if (isError) <>ERROR</>
+    if (isLoading) <>LOADING</>
+    
 
     return (
         <Flex

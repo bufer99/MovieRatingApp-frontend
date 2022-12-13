@@ -13,7 +13,6 @@ function App() {
       <Route path="/" element={<Layout />}>
         <Route index element={<MovieBrowser />} />
         <Route path="movies" element={<UserMovies />} />
-        <Route path="login" element={<Login />} />
         <Route path="*" element={<NoMatch />} />
       </Route>
     </Routes>

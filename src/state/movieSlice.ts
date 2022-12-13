@@ -1,30 +1,24 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Movie } from '../types';
 import type { RootState } from './store';
 
-
-// Define a type for the slice state
 interface MovieState {
-    movies: Array<string>
-    //movies: string[]
-}
-
-// Define the initial state using that type
-const initialState: MovieState = {
-    movies: []
+    activeMovie: Movie | null
 }
 
 const slice = createSlice({
     name: 'movie',
-    initialState,
+    initialState: { activeMovie: null } as MovieState,
     reducers: {
-        addMovie: (state: MovieState, action: PayloadAction<Array<string>>) => {
-            state.movies = [...state.movies, ...action.payload];
+        setMovie: (state: MovieState, action: PayloadAction<Movie>) => {
+            console.log(action.payload)
+            state.activeMovie = action.payload;
         },
     },
 })
 
-export const { addMovie } = slice.actions
+export const { setMovie } = slice.actions
 
 export default slice.reducer
 
-export const getMovies = (state: RootState) => state.movie;
+export const getMovie = (state: RootState) => state.movie.activeMovie;

@@ -4,7 +4,7 @@ import SearchResult from './SearchResult';
 import { useLazyGetMoviesQuery } from '../state/movieApiSlice';
 import { Movie } from '../types';
 
-export default function SearchBar() {
+export default function SearchBar({ movie }: { movie: Movie | null }) {
 
     const [isOpen, setOpen] = useState<boolean>(false)
     const [trigger, { isLoading, isError, data, error }] = useLazyGetMoviesQuery();
@@ -13,7 +13,7 @@ export default function SearchBar() {
 
     useEffect(() => {
         console.log(queryResult)
-    },[queryResult])
+    }, [queryResult])
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
         trigger(e.target.value).then(response => {
@@ -21,37 +21,18 @@ export default function SearchBar() {
                 setQueryResult(data
                     .results
                     .filter(e => e.poster_path)
-                    .sort((a, b) => b?.vote_count - a?.vote_count))
+                    /*.sort((a, b) => b?.vote_count - a?.vote_count)*/)
             }
         });
     }
 
-    /*
-    const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.value.length > 2) {
-            //console.log(e.target.value)
-            trigger(e.target.value)
-                .then((res) => setQueryResult(
-                    (res) => {
-                        return res
-                            .data
-                            .results
-                            .filter(e => e.poster_path)
-                            .sort((a, b) => b.vote_count - a.vote_count)
-                    }
-                ));
-        } else {
-            setQueryResult([])
-        }
-    }
-*/
-
     return (
-        <Flex>
+        <Flex
+            position="relative"
+        >
             <Input
-                onBlur={() => setOnFocus(false)}
+                //onBlur={() => setOnFocus(false)}
                 onFocus={() => setOnFocus(true)}
-                position="relative"
                 maxW="100%"
                 //width={isOpen ? '100%' : '0px'}
                 type="text"
@@ -75,9 +56,9 @@ export default function SearchBar() {
             >
 
                 {
-                !isLoading && queryResult?.map(e => (
-                    <SearchResult key={e.id} {...e} />
-                ))}
+                    !isLoading && queryResult?.map(e => (
+                        <SearchResult key={e.id} loseFocus={() => setOnFocus(false)} movie={e} />
+                    ))}
 
             </Flex>}
         </Flex>
