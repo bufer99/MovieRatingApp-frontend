@@ -13,6 +13,8 @@ export default function SearchResult({ movie, loseFocus }: { movie: Movie, loseF
 
     return (
         <Flex
+            zIndex={1}
+            bg="#1A202C"
             color="white"
             onClick={() => {
                 dispatch(setMovie(movie));

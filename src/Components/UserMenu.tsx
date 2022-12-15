@@ -5,6 +5,7 @@ import { selectCurrentUser, logout } from "../state/authSlice"
 import Login from "./Routes/Login";
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { setMovie } from "../state/movieSlice";
 
 export default function UserMenu() {
 
@@ -28,12 +29,15 @@ export default function UserMenu() {
                     <MenuGroup title={user.name}>
                         <MenuItem><Link to="/movies">Reviews</Link></MenuItem>
                         <MenuItem><Link to="/">Browse movies</Link></MenuItem>
-                        <MenuItem onClick={() => dispatch(logout())} >Logout</MenuItem>
+                        <MenuItem onClick={() => {
+                            dispatch(logout());
+                            dispatch(setMovie(null));
+                        }} >Logout</MenuItem>
                     </MenuGroup>
                     :
                     <MenuGroup>
                         <MenuItem onClick={() => setIsLogin(true)}>Sign in</MenuItem>
-                        <Login isOpen={isLogin} close={() => setIsLogin(false)} />
+                        <Login isOpen={isLogin} onClose={() => setIsLogin(false)} />
                     </MenuGroup>}
             </MenuList >
         </Menu >

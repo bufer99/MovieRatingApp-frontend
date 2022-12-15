@@ -6,10 +6,13 @@ import { useAppDispatch, useAppSelector } from '../state/store';
 import { logout } from '../state/authSlice';
 import { useMediaQuery } from '@chakra-ui/react';
 import UserMenu from './UserMenu';
+import { setMovie } from '../state/movieSlice';
 
 export default function Navbar() {
 
     const [isMobile] = useMediaQuery('(max-width: 500px)');
+    const dispatch = useAppDispatch()
+
 
     return (
         <Box
@@ -32,7 +35,7 @@ export default function Navbar() {
                 borderRadius={isMobile ? '' : "50px"}
             >
                 {true && <Heading as={"h1"} size="md" color={"white"}>
-                    <Link to="/">Movie-Rating-App</Link>
+                    <Link onClick={() => dispatch(setMovie(null))} to="/">Movie-Rating-App</Link>
                 </Heading>}
                 <UserMenu />
             </Flex>

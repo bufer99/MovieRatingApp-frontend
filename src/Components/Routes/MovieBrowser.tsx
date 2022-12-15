@@ -1,11 +1,13 @@
-import { Container, Flex, Image, Box, useMediaQuery, Grid, SimpleGrid, Text, Tooltip, Button, Modal } from "@chakra-ui/react"
+import { Container, Flex, Image, Box, useMediaQuery, Grid, SimpleGrid, Text, Tooltip, Button, Modal, useEditable, Spinner } from "@chakra-ui/react"
 import SearchBar from "../SearchBar"
 import { Movie } from "../../types"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useAppSelector } from "../../state/store"
 import { getMovie } from "../../state/movieSlice"
 import Login from "./Login"
 import StarRating from "../StarRating"
+import { useLazyGetReviewByMovieIDQuery } from "../../state/userSessionApiSlice"
+import { QueryStatus } from "@reduxjs/toolkit/dist/query"
 
 const MovieAttribute = ({ label, value, children }:
     {
@@ -35,18 +37,29 @@ const MovieAttribute = ({ label, value, children }:
 
 export default function MovieBrowser() {
 
+
     const [selectedMovie, setMovie] = useState<Movie | null>(null)
     const [isRating, setIsRating] = useState<boolean>(false);
+    const [signInForm, setSignInForm] = useState<boolean>(false);
 
     const movie = useAppSelector(state => state.movie.activeMovie);
+    const [trigger, { isFetching, isError, currentData, error }] = useLazyGetReviewByMovieIDQuery();
+
     const user = useAppSelector(state => state.auth.user)
     const [isMobile] = useMediaQuery('(max-width: 360px)');
     const [isGridWrap] = useMediaQuery('(max-width: 696px)');
-    console.log(movie)
 
-    const userRating = (): React.ReactNode => {
-        if(user) setIsRating(true)
-        return null;
+
+    useEffect(() => {
+        if (movie) {
+            trigger(movie.id);
+        }
+    }, [movie])
+
+    const userRating = (): void => {
+
+        if (user) setIsRating(true);
+        else setSignInForm(true);
     }
 
     return (
@@ -100,8 +113,20 @@ export default function MovieBrowser() {
                                 <MovieAttribute label={"Rating:"} value={movie.vote_average} />
                             </Flex>
                             <Flex>
-                                <MovieAttribute label={"Your rating:"} value={<Button onClick={userRating} colorScheme={"blue"}>Rate</Button>} />
-                                <StarRating max={10} isOpen={isRating} onClose={() => {setIsRating(false)}}/>
+                                <Box>
+                                    <Text textTransform="uppercase" fontFamily="monospace" color="gray.400" as="b">Your rating:</Text>
+                                    {
+                                        isFetching ?
+                                            <Spinner />
+                                            :
+                                            currentData?.review.rating ?
+                                                <Text pl="10px" as="b">{currentData.review.rating}</Text>
+                                                :
+                                                <Button zIndex={0} size={['xs', 'sm', 'md', 'md']} alignSelf="center" onClick={userRating} colorScheme="blue">Rate</Button>
+                                    }
+                                </Box>
+                                <StarRating max={10} isOpen={isRating} onClose={() => { setIsRating(false); trigger(movie.id) }} />
+                                <Login isOpen={signInForm} onClose={() => setSignInForm(false)} forwardto="/" />
                             </Flex>
                         </Flex>
                         <MovieAttribute label={"Overview:"}>

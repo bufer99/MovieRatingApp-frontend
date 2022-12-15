@@ -41,8 +41,7 @@ interface Login {
     fetchStarted: boolean,
 }
 
-
-export default function Login({ isOpen, close }: { isOpen: boolean, close: () => void }) {
+export default function Login({ isOpen, onClose, forwardto }: { isOpen: boolean, onClose: () => void, forwardto?:string }) {
 
     //const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -80,9 +79,9 @@ export default function Login({ isOpen, close }: { isOpen: boolean, close: () =>
             const result = await loginFn({ email: formInput.email, password: formInput.password });
             setIsLoading(false);
             if ("data" in result) {
-                console.log(result.data);
                 dispatch(setCredentials(result.data));
-                navigate("/movies")
+                if(forwardto) navigate(forwardto)
+                else navigate("/movies")
             } else {
                 setFormError(true);
                 setFormInput(initialState);
@@ -96,7 +95,7 @@ export default function Login({ isOpen, close }: { isOpen: boolean, close: () =>
         <Modal
             initialFocusRef={initialRef}
             isOpen={isOpen}
-            onClose={() => {setFormError(false);close()}}
+            onClose={() => {setFormError(false);onClose()}}
         >
             <ModalOverlay />
             <ModalContent>
@@ -130,7 +129,7 @@ export default function Login({ isOpen, close }: { isOpen: boolean, close: () =>
                     >
                         Sign in
                     </Button>
-                    <Button onClick={() => {setFormError(false);close()}}>Cancel</Button>
+                    <Button onClick={() => {setFormError(false);onClose()}}>Cancel</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>

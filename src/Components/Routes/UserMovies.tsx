@@ -1,5 +1,5 @@
 import { useAppSelector, useAppDispatch } from '../../state/store';
-import { useGetUserReviewsQuery } from '../../state/userMovieApiSlice';
+import { useGetUserReviewsQuery } from '../../state/userSessionApiSlice';
 import { Spinner } from '@chakra-ui/react';
 import MovieCard from '../MovieCard';
 import { Flex, Box } from '@chakra-ui/react';

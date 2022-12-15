@@ -4,12 +4,12 @@ import authApiSlice from "./authApiSlice";
 import authSlice from "./authSlice";
 import movieSlice from "./movieSlice";
 import movieApiSlice from "./movieApiSlice";
-import userMovieApiSlice from './userMovieApiSlice'
+import userSessionApiSlice from './userSessionApiSlice'
 
 export const store = configureStore({
   reducer: {
     [movieApiSlice.reducerPath]: movieApiSlice.reducer,
-    [userMovieApiSlice.reducerPath]: userMovieApiSlice.reducer,
+    [userSessionApiSlice.reducerPath]: userSessionApiSlice.reducer,
     [authApiSlice.reducerPath]: authApiSlice.reducer,
     auth: authSlice,
     movie: movieSlice
@@ -17,7 +17,7 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware()
       .concat(movieApiSlice.middleware)
-      .concat(userMovieApiSlice.middleware)
+      .concat(userSessionApiSlice.middleware)
       .concat(authApiSlice.middleware)
 });
 

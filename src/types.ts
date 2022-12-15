@@ -2,7 +2,7 @@ export interface Movie {
     "adult"?: boolean,
     "backdrop_path"?: string,
     "genre_ids"?: number[],
-    "id"?: number,
+    "id": number,
     "original_language"?: string,
     "original_title"?: string,
     "overview"?: string,
@@ -16,14 +16,14 @@ export interface Movie {
 }
 
 export interface UserMovie {
-    "id": number,
-    "title": string,
-    "released": number,
-    "poster_path": string
+    "id"?: number,
+    "title"?: string,
+    "released"?: string,
+    "poster_path"?: string
 }
 
 export interface Review {
-    "id": number,
+    "id"?: number,
     "review": string,
     "rating": number,
     'movie': UserMovie
