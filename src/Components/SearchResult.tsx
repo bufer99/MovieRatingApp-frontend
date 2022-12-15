@@ -5,7 +5,7 @@ import { Movie } from '../types';
 import { useAppDispatch } from '../state/store';
 import { setMovie } from '../state/movieSlice';
 
-export default function SearchResult({movie, loseFocus} : { movie:Movie, loseFocus: () => void}) {
+export default function SearchResult({ movie, loseFocus }: { movie: Movie, loseFocus: () => void }) {
 
     const { title, backdrop_path, poster_path, vote_average, release_date } = movie;
     const [isLoaded, setIsLoaded] = useState(false);
@@ -13,6 +13,7 @@ export default function SearchResult({movie, loseFocus} : { movie:Movie, loseFoc
 
     return (
         <Flex
+            color="white"
             onClick={() => {
                 dispatch(setMovie(movie));
                 loseFocus()
@@ -26,7 +27,7 @@ export default function SearchResult({movie, loseFocus} : { movie:Movie, loseFoc
                 background: "gray.700",
             }}
             borderTop="1px solid #404040"
-            
+
         >
             <Image
                 onLoad={() => setIsLoaded(true)}
@@ -40,16 +41,15 @@ export default function SearchResult({movie, loseFocus} : { movie:Movie, loseFoc
             <Flex
                 direction="column"
                 margin="0 0 0 10px"
-                maxW="300px"
             >
                 <Box
-                    maxWidth="100%"
                     fontWeight="bold"
                     letterSpacing=".5px"
                     maxW="100%"
-                    textOverflow="ellipsis"
-                    overflow="hidden"
-                    whiteSpace="nowrap"
+                    whiteSpace="normal"
+                    //textOverflow="ellipsis"
+                    //overflow="hidden"
+                    //whiteSpace="nowrap"
                 >
                     {title}
                 </Box>

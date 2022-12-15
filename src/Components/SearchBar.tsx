@@ -16,28 +16,35 @@ export default function SearchBar({ movie }: { movie: Movie | null }) {
     }, [queryResult])
 
     const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
-        trigger(e.target.value).then(response => {
-            if (data) {
-                setQueryResult(data
-                    .results
-                    .filter(e => e.poster_path)
+        if (e.target.value === "") setQueryResult([])
+        else {
+            trigger(e.target.value).then(res => {
+                if (res.data) {
+                    setQueryResult(res.data
+                        .results
+                        .filter(e => e.poster_path)
                     /*.sort((a, b) => b?.vote_count - a?.vote_count)*/)
-            }
-        });
+                }
+            });
+        }
     }
 
     return (
         <Flex
             position="relative"
+            maxWidth="800px"
+            mx="auto"
         >
             <Input
                 //onBlur={() => setOnFocus(false)}
                 onFocus={() => setOnFocus(true)}
                 maxW="100%"
                 //width={isOpen ? '100%' : '0px'}
+                color="white"
                 type="text"
+                variant="outline"
                 onChange={onChange}
-                placeholder="SEARCH"
+                placeholder="Start typing"
                 _placeholder={{ opacity: 1, color: 'gray.500' }}
                 transition="width 1s"
             />
@@ -50,7 +57,7 @@ export default function SearchBar({ movie }: { movie: Movie | null }) {
                 flexDirection="column"
                 width="100%"
                 overflowY="scroll"
-                maxH="815px"
+                maxH="80vh"
                 borderRadius="0 0 5px 5px"
                 padding="0 0 5px 0"
             >

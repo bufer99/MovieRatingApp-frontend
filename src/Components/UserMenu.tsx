@@ -25,7 +25,7 @@ export default function UserMenu() {
             <MenuList>
 
                 {user ?
-                    <MenuGroup>
+                    <MenuGroup title={user.name}>
                         <MenuItem><Link to="/movies">Reviews</Link></MenuItem>
                         <MenuItem><Link to="/">Browse movies</Link></MenuItem>
                         <MenuItem onClick={() => dispatch(logout())} >Logout</MenuItem>
@@ -35,7 +35,6 @@ export default function UserMenu() {
                         <MenuItem onClick={() => setIsLogin(true)}>Sign in</MenuItem>
                         <Login isOpen={isLogin} close={() => setIsLogin(false)} />
                     </MenuGroup>}
-
             </MenuList >
         </Menu >
     )
