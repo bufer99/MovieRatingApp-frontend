@@ -113,7 +113,9 @@ export default function MovieBrowser() {
                                 <MovieAttribute label={"Rating:"} value={movie.vote_average} />
                             </Flex>
                             <Flex>
-                                <Box>
+                                <Flex
+                                    alignItems="baseline"
+                                >
                                     <Text textTransform="uppercase" fontFamily="monospace" color="gray.400" as="b">Your rating:</Text>
                                     {
                                         isFetching ?
@@ -124,7 +126,7 @@ export default function MovieBrowser() {
                                                 :
                                                 <Button zIndex={0} size={['xs', 'sm', 'md', 'md']} alignSelf="center" onClick={userRating} colorScheme="blue">Rate</Button>
                                     }
-                                </Box>
+                                </Flex>
                                 <StarRating max={10} isOpen={isRating} onClose={() => { setIsRating(false); trigger(movie.id) }} />
                                 <Login isOpen={signInForm} onClose={() => setSignInForm(false)} forwardto="/" />
                             </Flex>

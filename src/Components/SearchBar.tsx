@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Input, Flex } from "@chakra-ui/react";
+import { Input, Flex, Box, Spinner, Skeleton, SkeletonText } from "@chakra-ui/react";
 import SearchResult from './SearchResult';
 import { useLazyGetMoviesQuery } from '../state/movieApiSlice';
 import { Movie } from '../types';
@@ -7,7 +7,7 @@ import { Movie } from '../types';
 export default function SearchBar({ movie }: { movie: Movie | null }) {
 
     const [isOpen, setOpen] = useState<boolean>(false)
-    const [trigger, { isLoading, isError, data, error }] = useLazyGetMoviesQuery();
+    const [trigger, { isFetching, isError, data, error }] = useLazyGetMoviesQuery();
     const [onFocus, setOnFocus] = useState<boolean>(false);
     const [queryResult, setQueryResult] = useState<Array<Movie>>([]);
 
@@ -49,7 +49,7 @@ export default function SearchBar({ movie }: { movie: Movie | null }) {
                 transition="width 1s"
             />
 
-            {onFocus && queryResult.length > 0 && <Flex
+            {onFocus && <Flex
                 top="100%"
                 className='results'
                 background="gray.800"
@@ -63,11 +63,20 @@ export default function SearchBar({ movie }: { movie: Movie | null }) {
             >
 
                 {
-                    !isLoading && queryResult?.map(e => (
-                        <SearchResult key={e.id} loseFocus={() => setOnFocus(false)} movie={e} />
-                    ))}
+                    !isFetching && queryResult?.map(e => (
+                            <SearchResult key={e.id} loseFocus={() => setOnFocus(false)} movie={e} />
+                        ))
+                }
 
             </Flex>}
         </Flex>
     )
 }
+
+
+/**
+ * 
+ * isFetching ? <Spinner color='white'></Spinner> : queryResult?.map(e => (
+                        <SearchResult key={e.id} loseFocus={() => setOnFocus(false)} movie={e} />
+                    ))
+ */

@@ -1,8 +1,6 @@
-import "./MovieCard.css";
-
-import { StarIcon } from "@chakra-ui/icons";
 import { Box, Image, Flex, ScaleFade } from "@chakra-ui/react"
 import { useState } from "react";
+import MovieCardDetails from "./MovieCardDetails";
 
 interface MovieProps {
     title?: string,
@@ -10,18 +8,19 @@ interface MovieProps {
     backdrop_path?: string,
     poster_path?: string,
     vote_average?: number
+    review: string
 }
 
 export default function MovieCard(props: MovieProps) {
 
-    const { title, rating, backdrop_path, poster_path, vote_average } = props;
+    const { title, rating, backdrop_path, poster_path, vote_average, review } = props;
     const [onMouse, setOnMouse] = useState<boolean>(false);
 
     return (
         <Box
-            w="300px"
             position={"relative"}
         >
+
             <Flex
                 onMouseEnter={() => setOnMouse(true)}
                 onMouseLeave={() => setOnMouse(false)}
@@ -29,9 +28,8 @@ export default function MovieCard(props: MovieProps) {
                 position={"absolute"}
                 justifyContent={"center"}
                 alignItems={"center"}
-                height="100%"
-                width="100%"
-                borderRadius="5%"
+                h="100%"
+                w="100%"
                 transition={"background 200ms"}
                 _hover={{
                     background: "rgba(0, 0, 0, 0.5)",
@@ -39,28 +37,14 @@ export default function MovieCard(props: MovieProps) {
                 }}
             >
                 <ScaleFade initialScale={0.9} in={onMouse}>
-                    <Flex
-                        className="rating"
-                        fontSize="2xl"
-                        color={"white"}
-                        direction="column"
-                    >
-                        <Flex
-                            alignItems={"center"}
-                            gap="5px"
-                        >
-                            <StarIcon />
-                            <span>{rating}/10</span>
-                        </Flex>
-                        <span style={{ "textOverflow": "ellipsis", "overflow": "hidden", "whiteSpace": "nowrap", }}>{title}</span>
-                    </Flex>
+                    <MovieCardDetails review={review} title={title} rating={rating}/>
                 </ScaleFade>
             </Flex>
 
             <Image
-                borderRadius="5%"
                 src={`https://image.tmdb.org/t/p/w500${poster_path}`}
             ></Image>
+
         </Box>
     )
 }

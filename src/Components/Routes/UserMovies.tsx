@@ -1,9 +1,10 @@
 import { useAppSelector, useAppDispatch } from '../../state/store';
 import { useGetUserReviewsQuery } from '../../state/userSessionApiSlice';
-import { Spinner } from '@chakra-ui/react';
-import MovieCard from '../MovieCard';
+import { Skeleton, Spinner } from '@chakra-ui/react';
+import MovieCard from '../MovieCard/MovieCard';
 import { Flex, Box } from '@chakra-ui/react';
 import AddMovie from '../AddMovie';
+import ReviewsGrid from '../ReviewsGrid';
 
 const m = [
     {
@@ -71,23 +72,21 @@ const m = [
 
 export default function UserMovies() {
 
-    const { isError, isLoading, data } = useGetUserReviewsQuery();
+    const { isError, isLoading, isFetching, data } = useGetUserReviewsQuery();
     const movie = useAppSelector(state => state.movie);
-    console.log(data);
-
-    if (isError) <>ERROR</>
-    if (isLoading) <>LOADING</>
-    
 
     return (
-        <Flex
-            gap={5}
-            justifyContent="center"
-            wrap={"wrap"}
-        >
+        <ReviewsGrid>
             {data?.reviews.map(e => (
-                <MovieCard key={e.id} rating={e.rating} title={e.movie.title} poster_path={e.movie.poster_path} />
+                <Skeleton
+                    isLoaded={!isFetching}
+                    h="max-content"                    
+                >
+                    <Box maxW="500px">
+                        <MovieCard key={e.id} rating={e.rating} review={e.review} title={e.movie.title} poster_path={e.movie.poster_path} />
+                    </Box>
+                </Skeleton>
             ))}
-        </Flex>
+        </ReviewsGrid>
     )
 }
