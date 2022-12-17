@@ -73,14 +73,13 @@ const m = [
 export default function UserMovies() {
 
     const { isError, isLoading, isFetching, data } = useGetUserReviewsQuery();
-    const movie = useAppSelector(state => state.movie);
 
     return (
         <ReviewsGrid>
             {data?.reviews.map(e => (
                 <Skeleton
                     isLoaded={!isFetching}
-                    h="max-content"                    
+                    h="max-content"
                 >
                     <Box maxW="500px">
                         <MovieCard key={e.id} rating={e.rating} review={e.review} title={e.movie.title} poster_path={e.movie.poster_path} />

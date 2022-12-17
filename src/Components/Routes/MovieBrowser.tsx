@@ -43,12 +43,13 @@ export default function MovieBrowser() {
     const [signInForm, setSignInForm] = useState<boolean>(false);
 
     const movie = useAppSelector(state => state.movie.activeMovie);
-    const [trigger, { isFetching, isError, currentData, error }] = useLazyGetReviewByMovieIDQuery();
+    const [trigger, { isFetching, isError, currentData, error }] = useLazyGetReviewByMovieIDQuery({
+        pollingInterval: 10000,
+    });
 
     const user = useAppSelector(state => state.auth.user)
     const [isMobile] = useMediaQuery('(max-width: 360px)');
     const [isGridWrap] = useMediaQuery('(max-width: 696px)');
-
 
     useEffect(() => {
         if (movie) {
@@ -121,7 +122,7 @@ export default function MovieBrowser() {
                                         isFetching ?
                                             <Spinner />
                                             :
-                                            currentData?.review.rating ?
+                                            currentData?.review?.rating ?
                                                 <Text pl="10px" as="b">{currentData.review.rating}</Text>
                                                 :
                                                 <Button zIndex={0} size={['xs', 'sm', 'md', 'md']} alignSelf="center" onClick={userRating} colorScheme="blue">Rate</Button>
