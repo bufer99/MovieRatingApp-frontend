@@ -15,16 +15,27 @@ interface Auth {
 
 const slice = createSlice({
     name: 'auth',
-    initialState: { user: null, token: null } as Auth,
+    initialState: { user: null, token: localStorage.getItem('token') } as Auth,
     reducers: {
         setCredentials: (
             state: Auth,
             action: PayloadAction<Auth>
         ) => {
-            state.user = action.payload.user
-            state.token = action.payload.token
+            const { user, token } = action.payload;
+
+            if (token && user) {
+                localStorage.setItem('token', token);
+                localStorage.setItem('user', user.name);
+            }
+
+
+            state.user = user
+            state.token = token
         },
         logout: (state) => {
+
+            localStorage.clear();
+
             state.user = null
             state.token = null
         }

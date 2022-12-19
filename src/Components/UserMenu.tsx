@@ -3,19 +3,23 @@ import { HamburgerIcon } from "@chakra-ui/icons";
 import { useAppSelector, useAppDispatch } from "../state/store"
 import { selectCurrentUser, logout } from "../state/authSlice"
 import Login from "./Routes/Login";
-import { useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { setMovie } from "../state/movieSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function UserMenu() {
 
-    const user = useAppSelector(selectCurrentUser);
+    const navigate = useNavigate();
+    const user = useAppSelector(state => state.auth.user);
     const dispatch = useAppDispatch();
 
     const [isMobile] = useMediaQuery('(max-width: 425px)');
     const [isLogin, setIsLogin] = useState(false);
+    
+    useEffect(() => console.log(isLogin),[isLogin])
 
-    return (
+    if (user) return (
         <Menu>
             <MenuButton
                 as={isMobile ? IconButton : Button}
@@ -24,22 +28,25 @@ export default function UserMenu() {
                 Account
             </MenuButton>
             <MenuList>
-
-                {user ?
-                    <MenuGroup title={user.name}>
-                        <MenuItem><Link to="/movies">Reviews</Link></MenuItem>
-                        <MenuItem><Link to="/">Browse movies</Link></MenuItem>
-                        <MenuItem onClick={() => {
-                            dispatch(logout());
-                            dispatch(setMovie(null));
-                        }} >Logout</MenuItem>
-                    </MenuGroup>
-                    :
-                    <MenuGroup>
-                        <MenuItem onClick={() => setIsLogin(true)}>Sign in</MenuItem>
-                        <Login isOpen={isLogin} onClose={() => setIsLogin(false)} />
-                    </MenuGroup>}
+                <MenuGroup title={user.name}>
+                    <MenuItem><Link style={{ width: "100%" }} to="/movies">Reviews</Link></MenuItem>
+                    <MenuItem><Link style={{ width: "100%" }} to="/">Browse movies</Link></MenuItem>
+                    <MenuItem onClick={() => {
+                        dispatch(logout());
+                        dispatch(setMovie(null));
+                        navigate("/");
+                        //Login bug
+                        setIsLogin(false);
+                        
+                    }} >Logout</MenuItem>
+                </MenuGroup>
             </MenuList >
         </Menu >
+    )
+    else return (
+        <Fragment>
+            <Button onClick={() => setIsLogin(true)}>Sign in</Button>
+            <Login isOpen={isLogin} onClose={() => setIsLogin(false)} />
+        </Fragment>
     )
 }

@@ -1,10 +1,11 @@
 import { useAppSelector, useAppDispatch } from '../../state/store';
 import { useGetUserReviewsQuery } from '../../state/userSessionApiSlice';
-import { Skeleton, Spinner } from '@chakra-ui/react';
 import MovieCard from '../MovieCard/MovieCard';
-import { Flex, Box } from '@chakra-ui/react';
+import { Flex, Box, Skeleton, Spinner } from '@chakra-ui/react';
 import AddMovie from '../AddMovie';
 import ReviewsGrid from '../ReviewsGrid';
+import React, { Children } from 'react';
+import RouteIndicator from '../RouteIndicator';
 
 const m = [
     {
@@ -69,23 +70,52 @@ const m = [
     }
 ]
 
+const MySkeleton = ({ isLoaded, children }: { isLoaded: boolean, children: React.ReactNode }) => {
+    
+    return (
+        <Flex
+            position="relative"
+        >
+            <Box opacity={isLoaded ? '1' : '0'}>
+                {children}
+            </Box>
+            <Flex
+                display={isLoaded ? 'none' : 'flex'}
+                position="absolute"
+                h="100%"
+                w="100%"
+                justifyContent="center"
+                alignItems="center"
+                border="black 1px solid"
+                transition="display 2s"
+            >
+                <Spinner color='white' size="xl" />
+            </Flex>
+        </Flex>
+    )
+}
 
 export default function UserMovies() {
 
     const { isError, isLoading, isFetching, data } = useGetUserReviewsQuery();
+    const user = useAppSelector(state => state.auth.user?.name);
 
     return (
-        <ReviewsGrid>
-            {data?.reviews.map(e => (
-                <Skeleton
-                    isLoaded={!isFetching}
-                    h="max-content"
-                >
-                    <Box maxW="500px">
-                        <MovieCard key={e.id} rating={e.rating} review={e.review} title={e.movie.title} poster_path={e.movie.poster_path} />
-                    </Box>
-                </Skeleton>
-            ))}
-        </ReviewsGrid>
+        <React.Fragment>
+            <RouteIndicator>
+                Movies you rated
+            </RouteIndicator>
+            <ReviewsGrid>
+                {data?.reviews.map(e => (
+                    <MySkeleton
+                        isLoaded={!isFetching}
+                    >
+                        <Box maxW="500px" h="100%">
+                            <MovieCard key={e.id} rating={e.rating} review={e.review} title={e.movie.title} poster_path={e.movie.poster_path} />
+                        </Box>
+                    </MySkeleton>
+                ))}
+            </ReviewsGrid>
+        </React.Fragment>
     )
 }

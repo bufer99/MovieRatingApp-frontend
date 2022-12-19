@@ -34,7 +34,7 @@ function Layout() {
           minH="calc(100vh - 5rem)"
           maxWidth="1400px"
           key={location.key}
-          py="3rem"
+          pb="3rem"
         >
           <Outlet />
         </Container>

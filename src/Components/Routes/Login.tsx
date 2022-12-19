@@ -41,24 +41,20 @@ interface Login {
     fetchStarted: boolean,
 }
 
-export default function Login({ isOpen, onClose, forwardto }: { isOpen: boolean, onClose: () => void, forwardto?:string }) {
-
-    //const { isOpen, onOpen, onClose } = useDisclosure()
+export default function Login({ isOpen = false, onClose, forwardto }: { isOpen: boolean, onClose: () => void, forwardto?: string }) {
 
     const initialRef = useRef(null)
-
+    console.log(isOpen)
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const [loginFn] = useLoginMutation();
 
-    const [isLoading, setIsLoading] = useState<boolean>(false);
     const [formInput, setFormInput] = useState<Form>({
         email: "bufer99@gmail.com",
         password: "12345"
     });
     const [formError, setFormError] = useState<boolean>(false)
-
     const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
 
         setFormInput((formInput) => {
@@ -73,14 +69,14 @@ export default function Login({ isOpen, onClose, forwardto }: { isOpen: boolean,
 
     const onClick = async (e: React.MouseEvent<HTMLButtonElement>): Promise<void> => {
         e.preventDefault();
-        setIsLoading(true);
+
 
         try {
             const result = await loginFn({ email: formInput.email, password: formInput.password });
-            setIsLoading(false);
+
             if ("data" in result) {
                 dispatch(setCredentials(result.data));
-                if(forwardto) navigate(forwardto)
+                if (forwardto) navigate(forwardto)
                 else navigate("/movies")
             } else {
                 setFormError(true);
@@ -95,7 +91,10 @@ export default function Login({ isOpen, onClose, forwardto }: { isOpen: boolean,
         <Modal
             initialFocusRef={initialRef}
             isOpen={isOpen}
-            onClose={() => {setFormError(false);onClose()}}
+            onClose={() => {
+                setFormError(false);
+                onClose()
+            }}
         >
             <ModalOverlay />
             <ModalContent>
@@ -105,19 +104,19 @@ export default function Login({ isOpen, onClose, forwardto }: { isOpen: boolean,
                     <FormControl>
                         <FormLabel>Email</FormLabel>
                         <Input isInvalid={formError}
-                        placeholder="Email"
-                        _placeholder={{
-                            color: `${formError ? 'crimson' : ''}`
-                        }} id="email" value={formInput.email} ref={initialRef} onChange={onChange} tabIndex={1}/>
+                            placeholder="Email"
+                            _placeholder={{
+                                color: `${formError ? 'crimson' : ''}`
+                            }} id="email" value={formInput.email} ref={initialRef} onChange={onChange} tabIndex={1} />
                     </FormControl>
 
                     <FormControl mt={4}>
                         <FormLabel>Password</FormLabel>
                         <Input isInvalid={formError}
-                        placeholder= "Password"
-                        _placeholder={{
-                            color: `${formError ? 'crimson' : ''}`
-                        }} id="password" type={"password"} value={formInput.password} onChange={onChange} tabIndex={2}/>
+                            placeholder="Password"
+                            _placeholder={{
+                                color: `${formError ? 'crimson' : ''}`
+                            }} id="password" type={"password"} value={formInput.password} onChange={onChange} tabIndex={2} />
                     </FormControl>
                 </ModalBody>
 
@@ -129,59 +128,9 @@ export default function Login({ isOpen, onClose, forwardto }: { isOpen: boolean,
                     >
                         Sign in
                     </Button>
-                    <Button onClick={() => {setFormError(false);onClose()}}>Cancel</Button>
+                    <Button onClick={() => { setFormError(false); onClose() }}>Cancel</Button>
                 </ModalFooter>
             </ModalContent>
         </Modal>
     )
 }
-
-
-
-/**
- * 
- * <Container
-            maxW={"300px"}
-        >
-            <form>
-                <Flex
-                    direction={"column"}
-                    alignItems="center"
-                    gap={"10px"}
-                >
-                    <Input
-                        isInvalid={formError}
-                        placeholder="Email"
-                        _placeholder={{
-                            color: `${formError ? 'crimson' : ''}`
-                        }}
-
-                        backgroundColor={"white"}
-                        variant={"outline"}
-                        id='email'
-                        value={formInput.email}
-                        onChange={onChange}
-                        type="text"
-                    />
-                    <Input
-                        isInvalid={formError}
-                        placeholder= "Password"
-                        _placeholder={{
-                            color: `${formError ? 'crimson' : ''}`
-                        }}
-
-                        backgroundColor={"white"}
-                        variant={"outline"}
-                        id='password'
-                        value={formInput.password}
-                        onChange={onChange}
-                        type="text" />
-                    <Button
-                        onClick={onClick}
-                        w="50%"
-                    >LOGIN</Button>
-                </Flex>
-            </form>
-            <ToastContainer />
-        </Container>
- */

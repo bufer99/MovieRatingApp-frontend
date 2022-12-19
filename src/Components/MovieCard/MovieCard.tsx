@@ -19,6 +19,7 @@ export default function MovieCard(props: MovieProps) {
     return (
         <Box
             position={"relative"}
+            h="100%"
         >
 
             <Flex
@@ -42,6 +43,7 @@ export default function MovieCard(props: MovieProps) {
             </Flex>
 
             <Image
+                h="100%"
                 src={`https://image.tmdb.org/t/p/w500${poster_path}`}
             ></Image>
 

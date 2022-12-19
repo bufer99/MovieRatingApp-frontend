@@ -7,19 +7,28 @@ import { getMovie } from "../../state/movieSlice"
 import Login from "./Login"
 import StarRating from "../StarRating"
 import { useLazyGetReviewByMovieIDQuery } from "../../state/userSessionApiSlice"
-import { QueryStatus } from "@reduxjs/toolkit/dist/query"
+import RouteIndicator from "../RouteIndicator"
 
-const MovieAttribute = ({ label, value, children }:
+const MovieAttribute = ({ label, value, children, onClick }:
     {
         label?: string,
         value?: string | number | React.ReactNode,
         children?: React.ReactNode,
+        onClick?: React.MouseEventHandler<HTMLParagraphElement>
     }) => {
 
     if (children) {
         return (
             <Flex direction="column" gap="5px">
-                <Text textTransform="uppercase" fontFamily="monospace" color="gray.400" as="b">{label}</Text>
+                <Text
+                    textTransform="uppercase"
+                    fontFamily="monospace"
+                    color="gray.400"
+                    as="b"
+                    cursor={onClick ? 'pointer' : undefined}
+                    onClick={onClick ? onClick : undefined}
+                    w="max-content"
+                >{label}</Text>
                 <Text as="em">
                     {children}
                 </Text>
@@ -38,13 +47,18 @@ const MovieAttribute = ({ label, value, children }:
 export default function MovieBrowser() {
 
 
-    const [selectedMovie, setMovie] = useState<Movie | null>(null)
+    //const [selectedMovie, setMovie] = useState<Movie | null>(null)
     const [isRating, setIsRating] = useState<boolean>(false);
     const [signInForm, setSignInForm] = useState<boolean>(false);
+    const [toggleReview, setToggleReview] = useState<boolean>(false);
+
+    const checkForReview = () => {
+        if (currentData?.review.review) setToggleReview(!toggleReview)
+    }
 
     const movie = useAppSelector(state => state.movie.activeMovie);
     const [trigger, { isFetching, isError, currentData, error }] = useLazyGetReviewByMovieIDQuery({
-        pollingInterval: 10000,
+        pollingInterval: 100000,
     });
 
     const user = useAppSelector(state => state.auth.user)
@@ -54,7 +68,9 @@ export default function MovieBrowser() {
     useEffect(() => {
         if (movie) {
             trigger(movie.id);
+            setToggleReview(false);
         }
+
     }, [movie])
 
     const userRating = (): void => {
@@ -71,7 +87,10 @@ export default function MovieBrowser() {
             w="100%"
             maxW="auto"
         >
-            <SearchBar movie={selectedMovie} />
+            <RouteIndicator>
+                Movie Browser
+            </RouteIndicator>
+            <SearchBar movie={movie} />
 
             {movie &&
                 <SimpleGrid
@@ -132,8 +151,11 @@ export default function MovieBrowser() {
                                 <Login isOpen={signInForm} onClose={() => setSignInForm(false)} forwardto="/" />
                             </Flex>
                         </Flex>
-                        <MovieAttribute label={"Overview:"}>
-                            {movie.overview}
+                        <MovieAttribute
+                            label={toggleReview ? "Your comment:" : "Overview:"}
+                            onClick={checkForReview}
+                        >
+                            {currentData?.review?.review ? toggleReview ? currentData?.review?.review : movie.overview : movie.overview}
                         </MovieAttribute>
                     </Container>
                 </SimpleGrid >
