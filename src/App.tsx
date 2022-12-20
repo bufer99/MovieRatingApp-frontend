@@ -4,7 +4,7 @@ import MovieBrowser from './Components/Routes/MovieBrowser';
 import NoMatch from './Components/Routes/NoMatch';
 import Layout from './Components/Layout';
 import UserMovies from './Components/Routes/UserMovies';
-import Login from './Components/Routes/Login';
+
 
 function App() {
 
@@ -20,10 +20,3 @@ function App() {
 }
 
 export default App
-
-/*
-routes:
-  Home
-  myMovies
-  Movie
-*/

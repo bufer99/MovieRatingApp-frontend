@@ -32,6 +32,7 @@ function Layout() {
           mt="5rem"
           w="100%"
           minH="calc(100vh - 5rem)"
+          h="max-content"
           maxWidth="1400px"
           key={location.key}
           pb="3rem"
