@@ -1,14 +1,11 @@
 import { UseQuery } from "@reduxjs/toolkit/dist/query/react/buildHooks";
 import { BaseQueryFn, createApi, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
-import { Movie, Review } from '../types';
+import { Movie, Review, User } from '../types';
 import { logout } from "./authSlice";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
 
-interface Response {
-    status: number,
-    reviews: Array<Review>
-}
+
 
 const baseQuery = fetchBaseQuery({
     baseUrl: BASE_URL,
@@ -36,13 +33,32 @@ const baseQueryWithReauth: BaseQueryFn<
     return result
 }
 
+
+interface Reviews {
+    reviews: Array<Review>
+}
+
+interface Users {
+    users: Array<User>
+}
+
+interface Movies {
+    movies: Array<Movie>
+}
+
 const userSessionApiSlice = createApi({
     reducerPath: "userMovieApi",
     baseQuery: baseQueryWithReauth,
     refetchOnMountOrArgChange: true,
     endpoints: (build) => ({
-        getUserReviews: build.query<Response, void>({
+        getUserReviews: build.query<Reviews, void>({
             query: () => ({ url: 'review' })
+        }),
+        getUsers: build.query<Users, void>({
+            query: () => ({ url: 'user' })
+        }),
+        getMovies: build.query<Movies, void>({
+            query: () => ({ url: 'movies' })
         }),
         createReview: build.mutation<Review, Review>({
             query: ({ id, ...patch }) => ({
@@ -63,7 +79,9 @@ export const {
     useGetUserReviewsQuery,
     useGetReviewByMovieIDQuery,
     useLazyGetReviewByMovieIDQuery,
-    useCreateReviewMutation
+    useCreateReviewMutation,
+    useGetUsersQuery,
+    useGetMoviesQuery
 } = userSessionApiSlice;
 
 export default userSessionApiSlice;

@@ -28,3 +28,10 @@ export interface Review {
     "rating": number,
     'movie': UserMovie
 }
+
+export interface User {
+    name: string,
+    email: string,
+    reviews?: Array<Review>,
+    review_count?: number
+}

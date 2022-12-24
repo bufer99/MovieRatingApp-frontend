@@ -71,7 +71,7 @@ const m = [
 ]
 
 const MySkeleton = ({ isLoaded, children }: { isLoaded: boolean, children: React.ReactNode }) => {
-    
+
     return (
         <Flex
             position="relative"
@@ -99,7 +99,7 @@ export default function UserMovies() {
 
     const { isError, isLoading, isFetching, data } = useGetUserReviewsQuery();
     const user = useAppSelector(state => state.auth.user?.name);
-
+    console.log(data)
     return (
         <React.Fragment>
             <RouteIndicator>

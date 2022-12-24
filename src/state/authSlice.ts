@@ -6,6 +6,7 @@ interface User {
     id: number,
     name: string,
     updated_at: string
+    isAdmin: boolean
 }
 
 interface Auth {
