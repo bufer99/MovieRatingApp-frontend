@@ -1,7 +1,9 @@
-import { Box, Container, Flex, Grid, GridItem, Spinner, Text } from "@chakra-ui/react";
+import { Box, Container, Flex, Grid, GridItem, Spinner, Text, } from "@chakra-ui/react";
 import { useEffect, useRef, useState } from "react";
-import { useGetUserReviewsQuery, useGetUsersQuery, useGetMoviesQuery } from "../../state/userSessionApiSlice";
+import { CloseButton, OpenButton } from "../Buttons";
+import { useGetReviewsQuery, useGetUsersQuery, useGetMoviesQuery } from "../../state/userSessionApiSlice";
 import { motion } from "framer-motion";
+import { Preview, Content } from "../GridItemView";
 
 
 
@@ -37,9 +39,11 @@ const StatisticsWrapper = ({ children, title }:
 //create user
 //
 
+const COVER_GRID = "1 / 1 / span 2 / span 2";
+
 export default function AdminBoard() {
 
-    const { isFetching: fetcingReviews, data: reviewsData } = useGetUserReviewsQuery();
+    const { isFetching: fetchingReviews, data: reviewsData } = useGetReviewsQuery();
     const { isFetching: fetchingUsers, data: usersData } = useGetUsersQuery();
     const { isFetching: fetchingMovies, data: moviesData } = useGetMoviesQuery();
 
@@ -50,103 +54,97 @@ export default function AdminBoard() {
     const handleClick = (e: React.MouseEvent<HTMLInputElement>) => {
         const id = (e.target as HTMLInputElement).closest('.item')?.id
         console.log(id)
-        activeStat === id ? setActiveStat('') : setActiveStat(id)
+        setActiveStat(id)
     }
 
 
     useEffect(() => {
-        console.log(activeStat)
-    }, [activeStat])
+        console.log(reviewsData)
+
+    }, [fetchingReviews])
 
 
 
-    const StatGridItem = ({ activeStat, id, children }:
-        {
-            activeStat: string | undefined,
-            id: string | undefined,
-            children: React.ReactNode
-        }) => {
-        return (
-            <GridItem
-                as={motion.div}
-                layout
-                gridArea={activeStat === id ? "1 / 1 / span 2 / span 2" : "1 / 1 / span 1 / span 1"}
-                zIndex={activeStat === id ? 2 : 0}
-                bg='tomato'
-                className="item"
-                id={id}
-                onClick={handleClick}
-            >
-                {children}
-            </GridItem >
-        )
-    }
+
 
 
 
     return (
         <Container
             color="white"
+            maxW="none"
         >
             <Grid
                 h='600px'
                 templateRows='repeat(2, 300px)'
                 templateColumns='repeat(2, 1fr)'
                 gap={8}
+                color="black"
             >
                 <StatGridItem
                     id="user"
                     activeStat={activeStat}
+                    handleClick={handleClick}
+                    onClose={() => setActiveStat('')}
+                    gridArea="1 / 1 / span 1 / span 1"
+                    bg="tomato"
                 >
-                    <StatisticsWrapper title="Users">
-                        <Flex
-                            wrap="wrap"
-                            gap="1rem"
-                            direction="column"
-                        >
-                            {fetchingUsers ? "Loading Users..." : usersData?.users.map(e => (
-                                <Box>{e.name}: {e.review_count}</Box>
-                            ))}
-                        </Flex>
-                    </StatisticsWrapper>
+
+                    {activeStat === "user" ?
+                        <StatisticsWrapper title="Users">
+                            <Flex
+                                wrap="wrap"
+                                gap="1rem"
+                                direction="column"
+                            >
+                                {fetchingUsers ? "Loading Users..." : usersData?.users.map(e => (
+                                    <Box>{e.name}: {e.review_count}</Box>
+                                ))}
+                            </Flex>
+                        </StatisticsWrapper>
+                        :
+                        <Preview label="Users">
+                            <Box>
+                                {fetchingUsers ? "Loading..." :
+                                    usersData?.users[0].name}: {usersData?.users[0].review_count}
+                            </Box>
+                        </Preview>
+                    }
+
                 </StatGridItem>
-                <GridItem
-                    as={motion.div}
-                    layout
-                    gridColumn="2 / span 1"
-                    gridRow="1 / span 1"
-                    gridArea={activeStat === "review" ? "1 / 1 / span 2 / span 2" : "1 / 2 / span 1 / span 1"}
-                    zIndex={activeStat === "review" ? 2 : 0}
-                    bg='papayawhip'
-                    className="item"
+                <StatGridItem
                     id="review"
-                    onClick={handleClick}
+                    activeStat={activeStat}
+                    handleClick={handleClick}
+                    onClose={() => setActiveStat('')}
+                    gridArea="1 / 2 / span 1 / span 1"
                 >
-                    <StatisticsWrapper title="Reviews">
-                        <Flex
-                            wrap="wrap"
-                            gap="1rem"
-                            direction="column"
-
-                        >
-                            {fetcingReviews ? "Loading Reviews..." : reviewsData?.reviews.map(e => (
-                                <Box>{e.rating}</Box>
-                            ))}
-
-                        </Flex>
-                    </StatisticsWrapper>
-                </GridItem>
-                <GridItem
-                    as={motion.div}
-                    layout
-                    gridColumn="2 / span 1"
-                    gridRow="1 / span 1"
-                    gridArea={activeStat === "movie" ? "1 / 1 / span 2 / span 2" : "2 / 1 / span 1 / span 2"}
-                    zIndex={activeStat === "movie" ? 2 : 0}
-                    bg='papayawhip'
-                    className="item"
+                    {activeStat === "review" ?
+                        <StatisticsWrapper title="Reviews">
+                            <Flex
+                                wrap="wrap"
+                                gap="1rem"
+                                direction="column"
+                            >
+                                {fetchingUsers ? "Loading Users..." : usersData?.users.map(e => (
+                                    <Box>{e.name}: {e.review_count}</Box>
+                                ))}
+                            </Flex>
+                        </StatisticsWrapper>
+                        :
+                        <Preview label="Reviews">
+                            <Box>
+                                {fetchingReviews ? "Loading..." : `${reviewsData?.reviews[0].movie.title}: ${reviewsData?.reviews[0].rating}/10`}
+                            </Box>
+                        </Preview>
+                    }
+                </StatGridItem>
+                <StatGridItem
                     id="movie"
-                    onClick={handleClick}
+                    activeStat={activeStat}
+                    handleClick={handleClick}
+                    onClose={() => setActiveStat('')}
+                    gridArea="2 / 1 / span 1 / span 2"
                 >
                     <StatisticsWrapper title="Movies">
                         <Flex
@@ -157,16 +155,44 @@ export default function AdminBoard() {
                         >
                             {fetchingMovies ? "Loading Movies..." : moviesData?.movies.map(e => (
                                 <Box>{e.title}</Box>
-
                             ))}
-
                         </Flex>
                     </StatisticsWrapper>
-                </GridItem>
-
+                </StatGridItem>
             </Grid>
 
 
         </Container>
+    )
+}
+
+const StatGridItem = ({ activeStat, id, children, handleClick, gridArea, bg = "papayawhip", onClose }:
+    {
+        activeStat: string | undefined,
+        id: string | undefined,
+        children: React.ReactNode,
+        handleClick: (e: React.MouseEvent<HTMLInputElement>) => void,
+        gridArea: string,
+        bg?: string,
+        onClose: () => void
+    }) => {
+
+    const active = activeStat === id;
+
+    return (
+        <GridItem
+            position="relative"
+            as={motion.div}
+            layout
+            borderRadius="20px"
+            gridArea={activeStat === id ? COVER_GRID : gridArea}
+            zIndex={activeStat === id ? 2 : 0}
+            bg={bg}
+            className="item"
+            id={id}
+        >
+            {active ? <CloseButton onClose={onClose} /> : <OpenButton onOpen={handleClick} />}
+            {children}
+        </GridItem >
     )
 }

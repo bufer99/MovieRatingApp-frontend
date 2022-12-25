@@ -55,10 +55,13 @@ const userSessionApiSlice = createApi({
             query: () => ({ url: 'review' })
         }),
         getUsers: build.query<Users, void>({
-            query: () => ({ url: 'user' })
+            query: () => ({ url: 'users' })
         }),
         getMovies: build.query<Movies, void>({
             query: () => ({ url: 'movies' })
+        }),
+        getReviews: build.query<Reviews, void>({
+            query: () => ({ url: 'reviews' })
         }),
         createReview: build.mutation<Review, Review>({
             query: ({ id, ...patch }) => ({
@@ -77,6 +80,7 @@ const userSessionApiSlice = createApi({
 export const {
     useLazyGetUserReviewsQuery,
     useGetUserReviewsQuery,
+    useGetReviewsQuery,
     useGetReviewByMovieIDQuery,
     useLazyGetReviewByMovieIDQuery,
     useCreateReviewMutation,
