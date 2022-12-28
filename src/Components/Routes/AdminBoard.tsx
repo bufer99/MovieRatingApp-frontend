@@ -2,7 +2,7 @@ import { Box, Container, Flex, Grid, GridItem, Spinner, Text, } from "@chakra-ui
 import { useEffect, useRef, useState } from "react";
 import { CloseButton, OpenButton } from "../Buttons";
 import { useGetReviewsQuery, useGetUsersQuery, useGetMoviesQuery } from "../../state/userSessionApiSlice";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { Preview, Content } from "../GridItemView";
 
 
@@ -13,6 +13,12 @@ const StatisticsWrapper = ({ children, title }:
     { children: React.ReactNode, title: string }) => {
     return (
         <Container
+            as={motion.div}
+            initial={{ y: 150, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: -300, opacity: 0 }}
+            //transitionDelay="50ms"
+            transitionDuration="200ms"
             maxH="100%"
             overflowY="hidden"
         >
@@ -119,25 +125,31 @@ export default function AdminBoard() {
                     onClose={() => setActiveStat('')}
                     gridArea="1 / 2 / span 1 / span 1"
                 >
-                    {activeStat === "review" ?
-                        <StatisticsWrapper title="Reviews">
-                            <Flex
-                                wrap="wrap"
-                                gap="1rem"
-                                direction="column"
-                            >
-                                {fetchingUsers ? "Loading Users..." : usersData?.users.map(e => (
-                                    <Box>{e.name}: {e.review_count}</Box>
-                                ))}
-                            </Flex>
-                        </StatisticsWrapper>
-                        :
-                        <Preview label="Reviews">
-                            <Box>
-                                {fetchingReviews ? "Loading..." : `${reviewsData?.reviews[0].movie.title}: ${reviewsData?.reviews[0].rating}/10`}
-                            </Box>
-                        </Preview>
-                    }
+                    <AnimatePresence exitBeforeEnter={true}>
+                        {activeStat === "review" ?
+
+                            <StatisticsWrapper title="Reviews">
+                                <Flex
+                                    wrap="wrap"
+                                    gap="1rem"
+                                    direction="column"
+                                >
+                                    {fetchingUsers ? "Loading Users..." : usersData?.users.map(e => (
+                                        <Box>{e.name}: {e.review_count}</Box>
+                                    ))}
+                                </Flex>
+                            </StatisticsWrapper>
+
+                            :
+
+                            <Preview label="Reviews">
+                                <Box>
+                                    {fetchingReviews ? "Loading..." : `${reviewsData?.reviews[0].movie.title}: ${reviewsData?.reviews[0].rating}/10`}
+                                </Box>
+                            </Preview>
+
+                        }
+                    </AnimatePresence>
                 </StatGridItem>
                 <StatGridItem
                     id="movie"
@@ -146,18 +158,28 @@ export default function AdminBoard() {
                     onClose={() => setActiveStat('')}
                     gridArea="2 / 1 / span 1 / span 2"
                 >
-                    <StatisticsWrapper title="Movies">
-                        <Flex
-                            wrap="wrap"
-                            gap="1rem"
-                            direction="column"
+                    {activeStat === "movie" ?
+                        <StatisticsWrapper title="Movies">
+                            <Flex
+                                wrap="wrap"
+                                gap="1rem"
+                                direction="column"
 
-                        >
-                            {fetchingMovies ? "Loading Movies..." : moviesData?.movies.map(e => (
-                                <Box>{e.title}</Box>
-                            ))}
-                        </Flex>
-                    </StatisticsWrapper>
+                            >
+                                {fetchingMovies ? "Loading Movies..." : moviesData?.movies.map(e => (
+                                    <Box>{e.title}</Box>
+                                ))}
+                            </Flex>
+                        </StatisticsWrapper>
+
+                        :
+
+                        <Preview label="movie">
+                            <Box>
+                                {fetchingMovies ? "Loading Movies..." : moviesData?.movies[0].title}
+                            </Box>
+                        </Preview>
+                    }
                 </StatGridItem>
             </Grid>
 
@@ -179,14 +201,23 @@ const StatGridItem = ({ activeStat, id, children, handleClick, gridArea, bg = "p
 
     const active = activeStat === id;
 
+    const [zIndex, setZindex] = useState<number>(0);
+
+    useEffect(() => {
+
+        if (active) setZindex(2)
+        console.log(`${id} ${zIndex}`)
+    }, [active])
+
     return (
         <GridItem
             position="relative"
             as={motion.div}
             layout
+            onTransitionEnd={() => {if(!active) setZindex(0)}}
             borderRadius="20px"
             gridArea={activeStat === id ? COVER_GRID : gridArea}
-            zIndex={activeStat === id ? 2 : 0}
+            zIndex={zIndex}
             bg={bg}
             className="item"
             id={id}
