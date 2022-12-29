@@ -1,8 +1,20 @@
 import { Box, Flex, Text } from "@chakra-ui/react"
 import React from "react"
 import { motion } from "framer-motion"
+import { UseQuery } from "@reduxjs/toolkit/dist/query/react/buildHooks"
+import { Movies, Reviews, Users } from "../state/userSessionApiSlice";
 
-export function Preview({ children, label }: { children: React.ReactNode, label: string }) {
+export function Preview({ children, label, isError, isFetching, data }:
+    {
+        children: React.ReactNode,
+        label: string,
+        isError: boolean,
+        isFetching: boolean,
+        data?: string
+    }) {
+
+    //const key = Object.keys(data)[0]
+
     return (
         <Flex
             as={motion.div}
@@ -26,11 +38,20 @@ export function Preview({ children, label }: { children: React.ReactNode, label:
             >
                 <Text as="u">{label}</Text>
             </Box>
-            {children}
+            <Box textAlign="center">
+                {isFetching ? "Loading..." : isError ? <ErrorMsg /> : data}
+            </Box>
         </Flex>
     )
 }
 
+const ErrorMsg = () => {
+    return (
+        <Box>
+            Error while fetching data, <wbr />please refresh the page
+        </Box>
+    )
+}
 
 export function Content({ children }: { children: React.ReactNode }) {
     return (

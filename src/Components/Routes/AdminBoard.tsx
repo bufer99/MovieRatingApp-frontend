@@ -49,9 +49,9 @@ const COVER_GRID = "1 / 1 / span 2 / span 2";
 
 export default function AdminBoard() {
 
-    const { isFetching: fetchingReviews, data: reviewsData } = useGetReviewsQuery();
-    const { isFetching: fetchingUsers, data: usersData } = useGetUsersQuery();
-    const { isFetching: fetchingMovies, data: moviesData } = useGetMoviesQuery();
+    const { isError: reviewsError, isFetching: fetchingReviews, data: reviewsData } = useGetReviewsQuery();
+    const { isError: usersError, isFetching: fetchingUsers, data: usersData } = useGetUsersQuery();
+    const { isError: moviesError, isFetching: fetchingMovies, data: moviesData } = useGetMoviesQuery();
 
     const [activeStat, setActiveStat] = useState<string | undefined>('');
 
@@ -60,7 +60,8 @@ export default function AdminBoard() {
     const handleClick = (e: React.MouseEvent<HTMLInputElement>) => {
         const id = (e.target as HTMLInputElement).closest('.item')?.id
         console.log(id)
-        setActiveStat(id)
+        setActiveStat(id);
+
     }
 
 
@@ -109,11 +110,8 @@ export default function AdminBoard() {
                             </Flex>
                         </StatisticsWrapper>
                         :
-                        <Preview label="Users">
-                            <Box>
-                                {fetchingUsers ? "Loading..." :
-                                    usersData?.users[0].name}: {usersData?.users[0].review_count}
-                            </Box>
+                        <Preview label="Users"  isError={usersError} isFetching={fetchingUsers} data={usersData?.users[0].name + ':' + usersData?.users[0].review_count}>
+                            
                         </Preview>
                     }
 
@@ -142,10 +140,8 @@ export default function AdminBoard() {
 
                             :
 
-                            <Preview label="Reviews">
-                                <Box>
-                                    {fetchingReviews ? "Loading..." : `${reviewsData?.reviews[0].movie.title}: ${reviewsData?.reviews[0].rating}/10`}
-                                </Box>
+                            <Preview label="Reviews"  isError={reviewsError} isFetching={fetchingReviews} data={reviewsData?.reviews[0].movie.title}>
+                                
                             </Preview>
 
                         }
@@ -174,10 +170,8 @@ export default function AdminBoard() {
 
                         :
 
-                        <Preview label="movie">
-                            <Box>
-                                {fetchingMovies ? "Loading Movies..." : moviesData?.movies[0].title}
-                            </Box>
+                        <Preview label="movie" isError={moviesError} isFetching={fetchingMovies} data={moviesData?.movies[0].title}>
+                            
                         </Preview>
                     }
                 </StatGridItem>
@@ -214,7 +208,7 @@ const StatGridItem = ({ activeStat, id, children, handleClick, gridArea, bg = "p
             position="relative"
             as={motion.div}
             layout
-            onTransitionEnd={() => {if(!active) setZindex(0)}}
+            onTransitionEnd={() => { if (!active) setZindex(0) }}
             borderRadius="20px"
             gridArea={activeStat === id ? COVER_GRID : gridArea}
             zIndex={zIndex}

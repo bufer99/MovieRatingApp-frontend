@@ -34,15 +34,15 @@ const baseQueryWithReauth: BaseQueryFn<
 }
 
 
-interface Reviews {
+export interface Reviews {
     reviews: Array<Review>
 }
 
-interface Users {
+export interface Users {
     users: Array<User>
 }
 
-interface Movies {
+export interface Movies {
     movies: Array<Movie>
 }
 
