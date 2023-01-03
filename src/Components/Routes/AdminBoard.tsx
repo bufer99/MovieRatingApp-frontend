@@ -1,51 +1,13 @@
-import { Box, Container, Flex, Grid, GridItem, Spinner, Text, } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
+import { Box, Container, Flex, Grid, GridItem, Image, Spinner, Text, useMediaQuery, } from "@chakra-ui/react";
+import { Fragment, useEffect, useRef, useState } from "react";
 import { CloseButton, OpenButton } from "../Buttons";
 import { useGetReviewsQuery, useGetUsersQuery, useGetMoviesQuery } from "../../state/userSessionApiSlice";
 import { AnimatePresence, motion } from "framer-motion";
 import { Preview, Content } from "../GridItemView";
+import { TiGroup, TiMessage, TiVideo } from "react-icons/ti";
+import StatGridItem from "../StatGridItem";
+import StatisticsWrapper from "../StatisticsWrapper";
 
-
-
-
-
-const StatisticsWrapper = ({ children, title }:
-    { children: React.ReactNode, title: string }) => {
-    return (
-        <Container
-            as={motion.div}
-            initial={{ y: 150, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -300, opacity: 0 }}
-            //transitionDelay="50ms"
-            transitionDuration="200ms"
-            maxH="100%"
-            overflowY="hidden"
-        >
-            <Text as="h4">{title}</Text>
-            <Box
-
-                bg="white"
-                color="black"
-                borderRadius="10px"
-                h="100%"
-
-                padding="1rem"
-            >
-                {children}
-            </Box>
-        </Container>
-    )
-}
-
-//users - most ratings
-//movies - worst/best
-//latest - review
-
-//create user
-//
-
-const COVER_GRID = "1 / 1 / span 2 / span 2";
 
 export default function AdminBoard() {
 
@@ -53,6 +15,7 @@ export default function AdminBoard() {
     const { isError: usersError, isFetching: fetchingUsers, data: usersData } = useGetUsersQuery();
     const { isError: moviesError, isFetching: fetchingMovies, data: moviesData } = useGetMoviesQuery();
 
+    const [isLargerThan750] = useMediaQuery('(min-width: 750px)')
     const [activeStat, setActiveStat] = useState<string | undefined>('');
 
     const ref = useRef(null)
@@ -61,29 +24,19 @@ export default function AdminBoard() {
         const id = (e.target as HTMLInputElement).closest('.item')?.id
         console.log(id)
         setActiveStat(id);
-
     }
-
-
-    useEffect(() => {
-        console.log(reviewsData)
-
-    }, [fetchingReviews])
-
-
-
-
-
 
 
     return (
         <Container
             color="white"
             maxW="none"
+            p="0"
         >
             <Grid
-                h='600px'
-                templateRows='repeat(2, 300px)'
+                h='80vh'
+                maxH="800px"
+                templateRows={isLargerThan750 ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)'}
                 templateColumns='repeat(2, 1fr)'
                 gap={8}
                 color="black"
@@ -93,8 +46,7 @@ export default function AdminBoard() {
                     activeStat={activeStat}
                     handleClick={handleClick}
                     onClose={() => setActiveStat('')}
-                    gridArea="1 / 1 / span 1 / span 1"
-                    bg="tomato"
+                    gridArea={isLargerThan750 ? "1 / 1 / span 1 / span 1" : "1 / 1 / span 1 / span 2"}
                 >
 
                     {activeStat === "user" ?
@@ -110,8 +62,12 @@ export default function AdminBoard() {
                             </Flex>
                         </StatisticsWrapper>
                         :
-                        <Preview label="Users"  isError={usersError} isFetching={fetchingUsers} data={usersData?.users[0].name + ':' + usersData?.users[0].review_count}>
-                            
+                        <Preview
+                            isError={usersError}
+                            isFetching={fetchingUsers}
+                            label="Users"
+                        >
+                            <TiGroup />
                         </Preview>
                     }
 
@@ -121,7 +77,7 @@ export default function AdminBoard() {
                     activeStat={activeStat}
                     handleClick={handleClick}
                     onClose={() => setActiveStat('')}
-                    gridArea="1 / 2 / span 1 / span 1"
+                    gridArea={isLargerThan750 ? "1 / 2 / span 1 / span 1" : "2 / 1 / span 1 / span 2"}
                 >
                     <AnimatePresence exitBeforeEnter={true}>
                         {activeStat === "review" ?
@@ -140,8 +96,8 @@ export default function AdminBoard() {
 
                             :
 
-                            <Preview label="Reviews"  isError={reviewsError} isFetching={fetchingReviews} data={reviewsData?.reviews[0].movie.title}>
-                                
+                            <Preview label="Reviews" isError={reviewsError} isFetching={fetchingReviews}>
+                                <TiMessage />
                             </Preview>
 
                         }
@@ -152,7 +108,7 @@ export default function AdminBoard() {
                     activeStat={activeStat}
                     handleClick={handleClick}
                     onClose={() => setActiveStat('')}
-                    gridArea="2 / 1 / span 1 / span 2"
+                    gridArea={isLargerThan750 ? "2 / 1 / span 1 / span 2" : "3 / 1 / span 1 / span 2"}
                 >
                     {activeStat === "movie" ?
                         <StatisticsWrapper title="Movies">
@@ -170,8 +126,8 @@ export default function AdminBoard() {
 
                         :
 
-                        <Preview label="movie" isError={moviesError} isFetching={fetchingMovies} data={moviesData?.movies[0].title}>
-                            
+                        <Preview label="Movies" isError={moviesError} isFetching={fetchingMovies}>
+                            <TiVideo />
                         </Preview>
                     }
                 </StatGridItem>
@@ -182,42 +138,3 @@ export default function AdminBoard() {
     )
 }
 
-const StatGridItem = ({ activeStat, id, children, handleClick, gridArea, bg = "papayawhip", onClose }:
-    {
-        activeStat: string | undefined,
-        id: string | undefined,
-        children: React.ReactNode,
-        handleClick: (e: React.MouseEvent<HTMLInputElement>) => void,
-        gridArea: string,
-        bg?: string,
-        onClose: () => void
-    }) => {
-
-    const active = activeStat === id;
-
-    const [zIndex, setZindex] = useState<number>(0);
-
-    useEffect(() => {
-
-        if (active) setZindex(2)
-        console.log(`${id} ${zIndex}`)
-    }, [active])
-
-    return (
-        <GridItem
-            position="relative"
-            as={motion.div}
-            layout
-            onTransitionEnd={() => { if (!active) setZindex(0) }}
-            borderRadius="20px"
-            gridArea={activeStat === id ? COVER_GRID : gridArea}
-            zIndex={zIndex}
-            bg={bg}
-            className="item"
-            id={id}
-        >
-            {active ? <CloseButton onClose={onClose} /> : <OpenButton onOpen={handleClick} />}
-            {children}
-        </GridItem >
-    )
-}

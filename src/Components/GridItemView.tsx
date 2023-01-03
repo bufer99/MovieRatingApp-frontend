@@ -4,13 +4,12 @@ import { motion } from "framer-motion"
 import { UseQuery } from "@reduxjs/toolkit/dist/query/react/buildHooks"
 import { Movies, Reviews, Users } from "../state/userSessionApiSlice";
 
-export function Preview({ children, label, isError, isFetching, data }:
+export function Preview({ children, label, isError, isFetching }:
     {
         children: React.ReactNode,
         label: string,
         isError: boolean,
         isFetching: boolean,
-        data?: string
     }) {
 
     //const key = Object.keys(data)[0]
@@ -29,18 +28,14 @@ export function Preview({ children, label, isError, isFetching, data }:
             alignItems="center"
             position="relative"
         >
-            <Box
-                position="absolute"
-                top="0"
-                left="10px"
-                fontSize={['x-large']}
-
+            <Flex
+                justifyContent="center"
+                alignItems="center"
+                gap="1rem"
             >
-                <Text as="u">{label}</Text>
-            </Box>
-            <Box textAlign="center">
-                {isFetching ? "Loading..." : isError ? <ErrorMsg /> : data}
-            </Box>
+                {children}
+                <Text>{label}</Text>
+            </Flex>
         </Flex>
     )
 }
