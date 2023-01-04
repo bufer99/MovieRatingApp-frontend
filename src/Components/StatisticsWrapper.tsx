@@ -1,30 +1,54 @@
-import { Box, Container, Text } from "@chakra-ui/react"
+import { Box, Container, Table, TableContainer, Tbody, Th, Thead, Tr } from "@chakra-ui/react"
 import { motion } from "framer-motion"
 
-export default function StatisticsWrapper({ children, title }:
-    { children: React.ReactNode, title: string }){
+export default function StatisticsWrapper({ children, colLabels }:
+    {
+        children: React.ReactNode,
+        colLabels: Array<string>
+    }) {
+
     return (
         <Container
             as={motion.div}
-            initial={{ y: 150, opacity: 0 }}
+            initial={{ y: 0, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -300, opacity: 0 }}
-            //transitionDelay="50ms"
+            exit={{ y: 0, opacity: 0 }}
+            transitionDelay="50ms"
             transitionDuration="200ms"
-            maxH="100%"
-            overflowY="hidden"
+            h="100%"
+            p="0"
+            fontSize={['1rem', 'md', 'lg', 'xl']}
+            maxW="max-content"
         >
-            <Text as="h4">{title}</Text>
             <Box
-
-                bg="white"
                 color="black"
-                borderRadius="10px"
                 h="100%"
-
                 padding="1rem"
+                overflowY="auto"
             >
-                {children}
+                <TableContainer
+                    
+                >
+                    <Table
+                        whiteSpace="nowrap"
+                        variant="unstyled"
+                        color="white"
+                        overflowX="auto"
+                    >
+                        <Thead>
+                            <Tr
+                                borderBottom="2px white solid"
+                            >
+                                <Th>#</Th>
+                                {colLabels.map(e => (<Th key={e} textAlign="center">{e}</Th>))}
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {children}
+                        </Tbody>
+                    </Table>
+                </TableContainer>
+
             </Box>
         </Container>
     )

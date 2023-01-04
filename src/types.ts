@@ -12,7 +12,9 @@ export interface Movie {
     "title"?: string,
     "video"?: boolean,
     "vote_average"?: number,
-    "vote_count": number
+    "vote_count": number,
+    "user_avg_rating": number
+
 }
 
 export interface UserMovie {
@@ -26,7 +28,16 @@ export interface Review {
     "id"?: number,
     "review": string,
     "rating": number,
-    'movie': UserMovie
+    'movie': UserMovie,
+}
+
+export interface ReviewWithUser {
+    "id"?: number,
+    "review": string,
+    "rating": number,
+    'movie': UserMovie,
+    'user': User
+    'created_at': string
 }
 
 export interface User {

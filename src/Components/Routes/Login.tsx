@@ -1,17 +1,11 @@
-import { toast, ToastContainer } from 'react-toastify';
-import { useAppSelector, useAppDispatch } from '../../state/store';
-import { useRegisterMutation, useLoginMutation } from '../../state/authApiSlice';
+import { useAppDispatch } from '../../state/store';
+import { useLoginMutation } from '../../state/authApiSlice';
 import React, { useState, useRef } from 'react';
 import {
     Button,
-    Container,
-    Flex,
     Input,
-    Spinner,
     FormControl,
     FormLabel,
-    FormErrorMessage,
-    FormHelperText,
     Modal,
     ModalOverlay,
     ModalBody,
@@ -19,8 +13,6 @@ import {
     ModalContent,
     ModalFooter,
     ModalHeader,
-    useDisclosure
-
 } from '@chakra-ui/react';
 import { setCredentials } from '../../state/authSlice';
 import { useNavigate } from 'react-router';

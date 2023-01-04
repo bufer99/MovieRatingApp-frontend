@@ -1,6 +1,6 @@
 import { UseQuery } from "@reduxjs/toolkit/dist/query/react/buildHooks";
 import { BaseQueryFn, createApi, FetchArgs, fetchBaseQuery, FetchBaseQueryError } from "@reduxjs/toolkit/query/react";
-import { Movie, Review, User } from '../types';
+import { Movie, Review, ReviewWithUser, User } from '../types';
 import { logout } from "./authSlice";
 
 const BASE_URL = "http://127.0.0.1:8000/api";
@@ -23,19 +23,16 @@ const baseQueryWithReauth: BaseQueryFn<
     unknown,
     FetchBaseQueryError
 > = async (args, api, extraOptions) => {
-    console.log("REAUTH")
     let result = await baseQuery(args, api, extraOptions)
     if (result.error && result.error.status === 401) {
-        console.log("EXP")
         api.dispatch(logout())
-
     }
     return result
 }
 
 
 export interface Reviews {
-    reviews: Array<Review>
+    reviews: Array<ReviewWithUser>
 }
 
 export interface Users {

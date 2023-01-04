@@ -14,9 +14,20 @@ interface Auth {
     token: string | null
 }
 
+function intUser(): User | null {
+    const user = localStorage.getItem('user')
+    if (user) {
+        return JSON.parse(user);
+    }
+    return null;
+}
+
 const slice = createSlice({
     name: 'auth',
-    initialState: { user: null, token: localStorage.getItem('token') } as Auth,
+    initialState: {
+        user: intUser(),
+        token: localStorage.getItem('token')
+    } as Auth,
     reducers: {
         setCredentials: (
             state: Auth,
@@ -26,7 +37,7 @@ const slice = createSlice({
 
             if (token && user) {
                 localStorage.setItem('token', token);
-                localStorage.setItem('user', user.name);
+                localStorage.setItem('user', JSON.stringify(user));
             }
 
 

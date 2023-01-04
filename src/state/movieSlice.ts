@@ -11,7 +11,6 @@ const slice = createSlice({
     initialState: { activeMovie: null } as MovieState,
     reducers: {
         setMovie: (state: MovieState, action: PayloadAction<Movie | null>) => {
-            console.log(action.payload)
             state.activeMovie = action.payload;
         },
     },

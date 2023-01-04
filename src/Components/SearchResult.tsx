@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react'
-import { Box, Flex, Container, VStack, Grid, Input, Image, color, Spinner } from "@chakra-ui/react";
+import { useState } from 'react'
+import { Box, Flex, Image } from "@chakra-ui/react";
 import { StarIcon } from '@chakra-ui/icons';
 import { Movie } from '../types';
 import { useAppDispatch } from '../state/store';
 import { setMovie } from '../state/movieSlice';
 
-export default function SearchResult({ movie, loseFocus, onClick }: { movie: Movie, loseFocus: () => void, onClick: () => void }) {
+export default function SearchResult({ movie, loseFocus }: { movie: Movie, loseFocus: () => void }) {
 
-    const { title, backdrop_path, poster_path, vote_average, release_date } = movie;
+    const { title, poster_path, vote_average, release_date } = movie;
     const [isLoaded, setIsLoaded] = useState(false);
     const dispatch = useAppDispatch()
 
@@ -19,7 +19,6 @@ export default function SearchResult({ movie, loseFocus, onClick }: { movie: Mov
             onClick={() => {
                 dispatch(setMovie(movie));
                 loseFocus()
-                onClick()
             }}
             opacity={isLoaded ? `1` : '0'}
             padding="5px"
@@ -50,9 +49,6 @@ export default function SearchResult({ movie, loseFocus, onClick }: { movie: Mov
                     letterSpacing=".5px"
                     maxW="100%"
                     whiteSpace="normal"
-                //textOverflow="ellipsis"
-                //overflow="hidden"
-                //whiteSpace="nowrap"
                 >
                     {title}
                 </Box>

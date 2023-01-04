@@ -13,7 +13,7 @@ interface MovieProps {
 
 export default function MovieCard(props: MovieProps) {
 
-    const { title, rating, backdrop_path, poster_path, vote_average, review } = props;
+    const { rating, poster_path, review } = props;
     const [onMouse, setOnMouse] = useState<boolean>(false);
 
     return (
@@ -38,7 +38,7 @@ export default function MovieCard(props: MovieProps) {
                 }}
             >
                 <ScaleFade initialScale={0.9} in={onMouse}>
-                    <MovieCardDetails review={review} title={title} rating={rating}/>
+                    <MovieCardDetails review={review} rating={rating}/>
                 </ScaleFade>
             </Flex>
 

@@ -1,9 +1,7 @@
 import { Container, Flex, Image, Box, useMediaQuery, Grid, SimpleGrid, Text, Tooltip, Button, Modal, useEditable, Spinner } from "@chakra-ui/react"
 import SearchBar from "../SearchBar"
-import { Movie } from "../../types"
 import { useEffect, useState } from "react"
 import { useAppSelector } from "../../state/store"
-import { getMovie } from "../../state/movieSlice"
 import Login from "./Login"
 import StarRating from "../StarRating"
 import { useLazyGetReviewByMovieIDQuery } from "../../state/userSessionApiSlice"
@@ -46,8 +44,6 @@ const MovieAttribute = ({ label, value, children, onClick }:
 
 export default function MovieBrowser() {
 
-
-    //const [selectedMovie, setMovie] = useState<Movie | null>(null)
     const [isRating, setIsRating] = useState<boolean>(false);
     const [signInForm, setSignInForm] = useState<boolean>(false);
     const [toggleReview, setToggleReview] = useState<boolean>(false);

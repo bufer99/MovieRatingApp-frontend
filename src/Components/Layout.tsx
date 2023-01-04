@@ -10,13 +10,8 @@ import { motion } from 'framer-motion'
 
 function Layout() {
 
-  const user = useAppSelector(state => state.auth.user);
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const location = useLocation();
-
-  console.log(location)
-
+  
   return (
     <Box
       as='main'

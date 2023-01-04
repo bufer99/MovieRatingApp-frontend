@@ -6,15 +6,10 @@ import { Movie } from '../types';
 
 export default function SearchBar({ movie }: { movie: Movie | null }) {
 
-    const [outsideClick, setOutsideClick] = useState<boolean>(false)
-    const [trigger, { isFetching, isError, data, error }] = useLazyGetMoviesQuery();
+    const [trigger, { isFetching }] = useLazyGetMoviesQuery();
     const [onFocus, setOnFocus] = useState<boolean>(false);
     const [queryResult, setQueryResult] = useState<Array<Movie>>([]);
     const [inputValue, setInputValue] = useState(movie?.title);
-
-    const handleOutSideclick = (e: React.MouseEvent<HTMLInputElement>): void => {
-        console.log(e)
-    }
 
     useEffect(() => {
         setInputValue(movie?.title);
@@ -92,7 +87,7 @@ export default function SearchBar({ movie }: { movie: Movie | null }) {
 
                 {
                     !isFetching && queryResult?.map(e => (
-                        <SearchResult onClick={() => handleOutSideclick} key={e.id} loseFocus={() => setOnFocus(false)} movie={e} />
+                        <SearchResult key={e.id} loseFocus={() => setOnFocus(false)} movie={e} />
                     ))
                 }
 

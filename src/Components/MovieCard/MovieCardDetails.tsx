@@ -1,7 +1,7 @@
-import { Flex, ScaleFade, Text } from "@chakra-ui/react"
+import { Flex, Text } from "@chakra-ui/react"
 import { StarIcon } from "@chakra-ui/icons"
 
-export default function MovieCardDetails({ title, rating, review }: { title?: string, rating?: number, review: string}) {
+export default function MovieCardDetails({ rating, review }: { rating?: number, review: string}) {
     return (
             <Flex
                 className="rating"

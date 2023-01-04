@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { CloseButton, OpenButton } from "./Buttons";
 import { motion } from "framer-motion";
 
-export default function StatGridItem({ activeStat, id, children, handleClick, gridArea, bg = "papayawhip", onClose }:
+export default function StatGridItem({ activeStat, id, children, handleClick, gridArea, bg = "#33335f", onClose }:
 {
     activeStat: string | undefined,
     id: string | undefined,
@@ -34,7 +34,7 @@ return (
         as={motion.div}
         layout
         onTransitionEnd={() => { if (!active) setZindex(0) }}
-        borderRadius="20px"
+        borderRadius="10px"
         gridArea={activeStat === id ? COVER_GRID : gridArea}
         zIndex={zIndex}
         bg={bg}

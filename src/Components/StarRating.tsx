@@ -1,6 +1,6 @@
 import { BsStarFill, BsStar } from "react-icons/bs";
 import { Box, Flex, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, ModalFooter, Button, Textarea } from "@chakra-ui/react";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useAppSelector } from "../state/store";
 import { useCreateReviewMutation } from "../state/userSessionApiSlice";
 
@@ -73,6 +73,7 @@ export default function StarRating({ max, isOpen, onClose }: { max: number, isOp
                         {
                             [...Array(max).keys()].map(e => (
                                 <Star
+                                    key={e}
                                     color="yellow"
                                     filled={hoverRating > rating ? e < hoverRating : e < rating}
                                     onMouseEnter={() => setHoverRating(e + 1)}
