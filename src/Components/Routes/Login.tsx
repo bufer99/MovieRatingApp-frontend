@@ -36,15 +36,14 @@ interface Login {
 export default function Login({ isOpen = false, onClose, forwardto }: { isOpen: boolean, onClose: () => void, forwardto?: string }) {
 
     const initialRef = useRef(null)
-    console.log(isOpen)
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
     const [loginFn] = useLoginMutation();
 
     const [formInput, setFormInput] = useState<Form>({
-        email: "bufer99@gmail.com",
-        password: "12345"
+        email: "",
+        password: ""
     });
     const [formError, setFormError] = useState<boolean>(false)
     const onChange = (e: React.ChangeEvent<HTMLInputElement>): void => {

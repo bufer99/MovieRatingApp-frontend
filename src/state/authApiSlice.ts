@@ -1,6 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-const BASE_URL: string = "http://localhost:8000/api/auth/";
+console.log()
+
+const BASE_URL: string = `${process.env.REACT_APP_API_URL}/auth`;
 
 const authApiSlice = createApi({
   reducerPath: "authApi",

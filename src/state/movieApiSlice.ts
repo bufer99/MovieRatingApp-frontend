@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Movie } from '../types';
-const BASE_URL = "https://api.themoviedb.org/3/search/";
-const TOKEN = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0ZWMyZGFmMzM2ZWE5MjNhYzFlNTUwYTJkMDNlZTQ4MiIsInN1YiI6IjYzOGI2MzkyMGU2NGFmMDA4ODU5NTQ3OCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.aThfidzvk5746LcUguNP-aq3xvqZcy0sDdqyJKq1iaY";
+const BASE_URL = process.env.REACT_APP_TMDB_API_URL;
+const TOKEN = process.env.REACT_APP_TMDB_API_TOKEN;
 
 
 interface MovieResponse {
