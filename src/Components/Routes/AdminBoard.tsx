@@ -15,7 +15,11 @@ export default function AdminBoard() {
     const { isError: usersError, isFetching: fetchingUsers, data: usersData } = useGetUsersQuery();
     const { isError: moviesError, isFetching: fetchingMovies, data: moviesData } = useGetMoviesQuery();
 
-    const [isLargerThan750] = useMediaQuery('(min-width: 750px)')
+    const [isLargerThan750] = useMediaQuery('(min-width: 750px)', {
+        ssr: false,
+        fallback: true,
+    })
+
     const [activeStat, setActiveStat] = useState<string | undefined>('');
 
     const handleClick = (e: React.MouseEvent<HTMLInputElement>) => {
@@ -23,6 +27,7 @@ export default function AdminBoard() {
         setActiveStat(id);
     }
 
+    console.log(isLargerThan750)
 
     return (
         <Container
@@ -52,9 +57,9 @@ export default function AdminBoard() {
                     {activeStat === "user" ?
                         <StatisticsWrapper colLabels={['user', 'No. review']}>
 
-                            {fetchingUsers ? "Loading Users..." : usersData?.users.map((e,k) => (
+                            {fetchingUsers ? "Loading Users..." : usersData?.users.map((e, k) => (
                                 <Tr key={k}>
-                                    <Td>{k+1}.</Td>
+                                    <Td>{k + 1}.</Td>
                                     <Td pr="0">{e.name}</Td>
                                     <Td textAlign="center" pl="0">{e.review_count}</Td>
                                 </Tr>
@@ -83,12 +88,12 @@ export default function AdminBoard() {
                         {activeStat === "review" ?
 
                             <StatisticsWrapper colLabels={['movie', 'user', 'date']}>
-                                {fetchingReviews ? "Loading Users..." : reviewsData?.reviews.map((e,k) => (
+                                {fetchingReviews ? "Loading Users..." : reviewsData?.reviews.map((e, k) => (
                                     <Tr key={k}>
-                                        <Td>{k+1}.</Td>
+                                        <Td>{k + 1}.</Td>
                                         <Td pr="0">{e?.movie?.title}</Td>
                                         <Td>{e?.user?.name}</Td>
-                                        <Td>{new Date(e?.created_at).toLocaleString()}</Td>
+                                        <Td><MyDate date_prop={e?.created_at} /></Td>
                                     </Tr>
                                 ))}
                             </StatisticsWrapper>
@@ -111,11 +116,11 @@ export default function AdminBoard() {
                 >
                     {activeStat === "movie" ?
                         <StatisticsWrapper colLabels={['movie', 'avg. rating', 'No. rating']}>
-                            {fetchingMovies ? "Loading Movies..." : moviesData?.movies.map((e,k) => (
+                            {fetchingMovies ? "Loading Movies..." : moviesData?.movies.map((e, k) => (
                                 <Tr key={k}>
-                                    <Td>{k+1}.</Td>
+                                    <Td>{k + 1}.</Td>
                                     <Td pr="0">{e.title}</Td>
-                                    <Td>{e.user_avg_rating}</Td>
+                                    <Td>{e.user_avg_rating.toFixed(1)}</Td>
                                     <Td>{e.vote_count}</Td>
                                 </Tr>
                             ))}
@@ -135,3 +140,18 @@ export default function AdminBoard() {
     )
 }
 
+
+const MyDate = ({ date_prop }: { date_prop: string }) => {
+
+    const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+
+    const date = new Date(date_prop);
+    const now = new Date();
+
+    const milliseconds = Math.abs(date.getTime() - now.getTime());
+    const hours = milliseconds / (1000 * 60 * 60);
+
+    if (hours < 24) return <>{date.toLocaleString(undefined, options)}</>;
+
+    return <>{date.toLocaleDateString(undefined, { ...options, hour: 'numeric', minute: 'numeric' })}</>;
+}

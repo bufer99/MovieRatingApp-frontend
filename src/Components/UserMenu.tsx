@@ -26,7 +26,7 @@ export default function UserMenu() {
             >
                 Account
             </MenuButton>
-            <MenuList>
+            <MenuList zIndex="5">
                 <MenuGroup title={user.name}>
                     <MenuItem><Link style={{ width: "100%" }} to="/movies">Reviews</Link></MenuItem>
                     <MenuItem><Link style={{ width: "100%" }} to="/">Browse movies</Link></MenuItem>

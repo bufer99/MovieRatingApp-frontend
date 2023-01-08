@@ -55,16 +55,22 @@ export default function SearchBar({ movie }: { movie: Movie | null }) {
                 />
                 <InputRightElement
                     w="max-content"
+                   
                 >
                     <Button
                         onClick={() => setInputValue('')}
                         variant="ghost"
                         color="white"
                         w="max-content"
+                        bg="#1A202C"
                         _hover={{
                             bg: "white",
                             color: "black"
                         }}
+                        borderRadius="0"
+                        borderTop="1px solid white"
+                        borderBottom="1px solid white"
+                        borderRight="1px solid white"
                     >
                         DELETE
                     </Button>

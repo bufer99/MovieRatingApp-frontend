@@ -21,7 +21,7 @@ const COVER_GRID = isLargerThan750 ? "1 / 1 / span 2 / span 2" : "1 / 1 / span 3
 const active = activeStat === id;
 const [zIndex, setZindex] = useState<number>(0);
 useEffect(() => {
-    if (active) setZindex(2)
+    if (active) setZindex(1)
 }, [active])
 
 const [popupHelp, setPopupHelp] = useState<boolean>(false);
