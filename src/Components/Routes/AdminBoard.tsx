@@ -120,7 +120,7 @@ export default function AdminBoard() {
                                 <Tr key={k}>
                                     <Td>{k + 1}.</Td>
                                     <Td pr="0">{e.title}</Td>
-                                    <Td>{parseFloat(e.user_avg_rating).toFixed(1)}</Td>
+                                    <Td>{e.user_avg_rating.toFixed(1)}</Td>
                                     <Td>{e.vote_count}</Td>
                                 </Tr>
                             ))}
