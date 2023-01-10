@@ -62,7 +62,7 @@ export default function SearchBar({ movie }: { movie: Movie | null }) {
                         variant="ghost"
                         color="white"
                         w="max-content"
-                        bg="#1A202C"
+                        bg="bg.body"
                         _hover={{
                             bg: "white",
                             color: "black"

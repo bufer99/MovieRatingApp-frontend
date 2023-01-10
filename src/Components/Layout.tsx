@@ -1,12 +1,10 @@
-import React, { Suspense, useEffect, useRef, useState } from 'react'
-import { Box, Flex, Container, Center } from "@chakra-ui/react";
-import SearchBar from './SearchBar';
-import { Outlet, Link, useNavigate, useLocation } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from '../state/store';
-import { logout } from '../state/authSlice';
+import { Box,  Container } from "@chakra-ui/react";
+import { Outlet, useLocation } from "react-router-dom";
 import NavBar from './NavBar';
 import { AnimatePresence } from 'framer-motion';
 import { motion } from 'framer-motion'
+
+
 
 function Layout() {
 
@@ -15,7 +13,7 @@ function Layout() {
   return (
     <Box
       as='main'
-      bg="#1A202C"
+      bg="bg.body"
     >
       <NavBar />
       <AnimatePresence

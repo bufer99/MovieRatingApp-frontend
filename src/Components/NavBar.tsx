@@ -20,14 +20,14 @@ export default function Navbar() {
             position="fixed"
             w="100%"
             h="5rem"
-            bg="#1A202C"
+            bg="bg.body"
             top={0}
             zIndex="2"
         >
             <Flex
                 alignItems="center"
                 justifyContent="space-around"
-                bg="#1A202C"
+                bg="bg.body"
                 maxW="1400px"
                 h="100%"
                 m="auto"

@@ -55,7 +55,7 @@ export default function StarRating({ max, isOpen, onClose }: { max: number, isOp
     return (
         <Modal isCentered isOpen={isOpen} onClose={onClose}>
             <ModalOverlay />
-            <ModalContent bg={"#30344c"}>
+            <ModalContent bg={'bg.modal'}>
                 <ModalHeader>
                     <Flex color="white" direction="column">
                         <Box>How did you like</Box>
